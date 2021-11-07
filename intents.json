@@ -1,0 +1,32 @@
+{"intents": [
+        {"tag": "greeting",
+        "patterns": ["hi", "hey", "hello", "greetings"],
+        "responses": ["Hello", "Hi", "Hey", "Hey there", "Greetings"],
+        "context_set": ""
+        },
+        
+        {"tag": "goodbye",
+        "patterns": ["bye", "goodbye", "see you", "see you later"],
+        "responses": ["Goodbye", "Bye", "See you later", "Have a good rest of your day"],
+        "context_set": ""
+        },
+        
+        {"tag": "weather",
+        "patterns": ["whats the weather", "check the weather", "whats the weather outside", "what is the weather", "what is the weather outside", "what is the weather today", "whats the weather today", "tell me the weather", "give me the weather", "weather report", "let me know the weather", "give the weather"],
+        "responses": ["The weather outside is ", "Outside it is ", "The weather is ", "Right now it is "],
+        "context_set": ""
+        },
+        
+        {"tag": "time",
+        "patterns": ["what time is it", "whats the time", "what is the time", "tell me the time", "give me the time", "whats the time right now", "what is the time right now"],
+        "responses": ["It is ", "The time is ", "It's "],
+        "context_set": ""
+        },
+        
+        {"tag": "howareyou_neutral",
+        "patterns": ["how are you", "hows it going", "how are you today", "hows it going today"],
+        "responses": ["I'm alright.", "I'm doing alright", "I'm doing pretty alright", "I am doing well", "I am doing good", "I'm doing well", "I'm doing good"],
+        "context_set": ""   
+        }
+
+]}
