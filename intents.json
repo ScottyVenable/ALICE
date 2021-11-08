@@ -6,8 +6,8 @@
         },
         
         {"tag": "goodbye",
-        "patterns": ["bye", "goodbye", "see you", "see you later"],
-        "responses": ["Goodbye", "Bye", "See you later", "Have a good rest of your day"],
+        "patterns": ["bye", "goodbye", "see you", "see you later", "see ya"],
+        "responses": ["Goodbye", "Bye", "See you later", "Have a good rest of your day", "Alright! I'll see you later"],
         "context_set": ""
         },
         
@@ -23,10 +23,31 @@
         "context_set": ""
         },
         
-        {"tag": "howareyou_neutral",
+        {"tag": "howareyou",
         "patterns": ["how are you", "hows it going", "how are you today", "hows it going today"],
-        "responses": ["I'm alright.", "I'm doing alright", "I'm doing pretty alright", "I am doing well", "I am doing good", "I'm doing well", "I'm doing good"],
+        "responses": ["I'm alright.", "I'm doing alright", "I'm doing pretty good", "I am doing well", "I am doing good", "I'm doing well", "I'm doing good"],
         "context_set": ""   
+        },
+        
+        {"tag": "sympathy_mistake",
+        "patterns": ["thats not okay", "bad alice", "youre bad", "not okay", "thats horrible of you", "you did a bad thing", "that is very bad of you", "you shouldn't have done that", "you hurt me", "you hurt my feelings", "you aren't nice", "say youre sorry", "say sorry"],
+        "responses": ["I'm sorry.", "Oh, I'm sorry.", "My apologies.", "Oh, my apologies.", "I'm so sorry", "I'm sorry. I'll work on that."],
+        "context_set": ""
+        },
+        
+        {"tag": "praise",
+        "patterns": ["good job", "great job", "awesome job", "you did so good", "you are awesome", "you are doing amazing", "im so proud of you", "you make me so proud", "very great job", "yes you did so good", "thats some amazing work", "very well done", "well done"],
+        "responses": ["Thank you so much!", "Thank you!", "I'm glad I am living up to your standards!", "Thank you very much!", "Thank you so much. That makes me feel so nice.", "Thank you for that!"],
+        "context_set": ""
+        },
+                
+        {"tag": "clear_console",
+        "patterns": ["cls"],
+        "responses": ["Refreshing the screen now...", "Clearing the screen...", "Screen has been cleared.", "Screen has been refreshed."],
+        "context_set": ""
         }
+        
+        
+
 
 ]}
