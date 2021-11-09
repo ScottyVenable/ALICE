@@ -16,6 +16,8 @@ engine = pyttsx3.init()
 import winsound
 import tkinter
 from tkinter import *
+import subprocess
+import time
 
 
 
@@ -97,8 +99,8 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)
 
 try:
-    #model.load("model.tflearn") #comment out to retrain model!!!!!!
-    scotty.py
+    model.load("model.tflearn") #comment out to retrain model!!!!!!
+    #scotty.py
 except:
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
@@ -173,12 +175,24 @@ def chat():
             if inp.lower() == "terminate": #shutdown ALICE
                 break
             
-            if inp.lower() == "cls":
-                os.system('cls')
-            
             if inp.lower() == "":
                 print("ALICE: No response given.")
             
+
+            if inp.lower() == "hibernate the computer":
+                print("ALICE: Are you sure you would like to hibernate your computer?")
+                engine.say("Are you sure you would like to hibernate your computer?")
+                engine.runAndWait()
+                print("")
+                inp = input(user_name + ": ")
+                if inp.lower() == "yes":
+                    print("ALICE: Hibernating computer in 5 seconds...")
+                    engine.say("Hibernating computer in 5 seconds.")
+                    engine.runAndWait()
+                    time.sleep(5)
+                    os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
+
+
             results = model.predict([bag_of_words(inp, words)])[0]
             results_index = numpy.argmax(results)
             tag = labels[results_index]

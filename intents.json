@@ -41,8 +41,8 @@
         "context_set": ""
         },
                 
-        {"tag": "clear_console",
-        "patterns": ["cls"],
+        {"tag": "yourewelcome",
+        "patterns": ["thank you", "thanks", "thank you ALICE"],
         "responses": ["Refreshing the screen now...", "Clearing the screen...", "Screen has been cleared.", "Screen has been refreshed."],
         "context_set": ""
         }
