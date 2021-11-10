@@ -32,6 +32,10 @@ def clearConsole():
     os.system(command)
 
 
+
+
+
+
 try: 
     # with open("data.pickle", "rb") as f:
        # words, labels, training, output = pickle.load(f)
@@ -53,7 +57,7 @@ except:
         if intent["tag"] not in labels:
                 labels.append(intent["tag"])
     
-    words = [stemmer.stem(w.lower()) for w in words if w != "?"]
+    words = [stemmer.stem(w.lower()) for w in words if w != "?" and "!"]
     words = sorted(list(set(words)))
     
     labels = sorted(labels)
@@ -125,10 +129,6 @@ def chat():
     engine.setProperty('voice', voices[1].id)
 
 
-# WATSON TEXT TO SPEECH    
-#    with open('./speech.wav', 'wb') as audio_file:
-#        res = tts.synthesize("Welcome. My name is ALICE, I am the Always Learning Interactive Companion Engine. How can I help you today?", accept='audio/wav', voice='en-US_AllisonV3Voice').get_result()
-#        audio_file.write(res.content)
     
 
     username_id = 0
@@ -171,26 +171,55 @@ def chat():
     
     
         while True:
+
+            alicemessage = "not updated yet."
+
+            def DisplayandSpeak():
+                print()
+                print("ALICE: " + alicemessage)
+                print()
+                engine.say(alicemessage)
+                engine.runAndWait()
+                inp = input(user_name + ": ")
+
             inp = input(user_name + ": ")
+
+            #terminate
             if inp.lower() == "terminate": #shutdown ALICE
                 break
             
+            #no response
             if inp.lower() == "":
                 print("ALICE: No response given.")
-            
+           
+            #test message
+            if inp.lower() == "test message":
+                alicemessage = "Okay. Let's see if this new function is working."
+                DisplayandSpeak();
 
-            if inp.lower() == "hibernate the computer":
-                print("ALICE: Are you sure you would like to hibernate your computer?")
-                engine.say("Are you sure you would like to hibernate your computer?")
-                engine.runAndWait()
-                print("")
-                inp = input(user_name + ": ")
-                if inp.lower() == "yes":
-                    print("ALICE: Hibernating computer in 5 seconds...")
-                    engine.say("Hibernating computer in 5 seconds.")
-                    engine.runAndWait()
-                    time.sleep(5)
+            #display ALICE's current stored message.
+            if inp.lower() == "alicemessage":
+                print(alicemessage)
+
+            #BLACKBEAR protocol (sleep/hibernate)
+            if inp.lower() == "execute blackbear protocol":
+                alicemessage = "Enter password to execute the blackbear protocol."
+                DisplayandSpeak()
+                print()
+                
+                if username_id == 1 and inp.lower() == "password":
+                    alicemessage = "blackbear protocol requested. executing in 3 seconds..."
+                    DisplayandSpeak()
+                    time.sleep(3)
                     os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
+                    clearConsole()
+                    print("ALICE: Welcome back!")
+            asktime = ["what time is it?", "what is the time?", "tell me the time?"]
+            if inp.lower() in asktime:
+                current_time = datetime.datetime.now()
+                alicemessage = "The current time is " + current_time.strftime("%I:%M %p")
+                DisplayandSpeak()
+
 
 
             results = model.predict([bag_of_words(inp, words)])[0]
@@ -202,6 +231,9 @@ def chat():
                 for tg in data["intents"]:
                     if tg["tag"] == tag:
                         responses = tg['responses']
+                    if tg["tag"] == time:
+                        current_time = datetime.datetime.now()
+                        responses = tg['responses'] + " " + current_time
                 
                 chosen_response = random.choice(responses)
                 
@@ -212,6 +244,7 @@ def chat():
                 engine.runAndWait()
                 
             else:
+                print()
                 print("ALICE: I'm sorry, I don't understand.")
                 engine.say("I'm sorry, I don't understand.")
                 print("")

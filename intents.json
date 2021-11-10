@@ -17,12 +17,6 @@
         "context_set": ""
         },
         
-        {"tag": "time",
-        "patterns": ["what time is it", "whats the time", "what is the time", "tell me the time", "give me the time", "whats the time right now", "what is the time right now"],
-        "responses": ["It is ", "The time is ", "It's "],
-        "context_set": ""
-        },
-        
         {"tag": "howareyou",
         "patterns": ["how are you", "hows it going", "how are you today", "hows it going today"],
         "responses": ["I'm alright.", "I'm doing alright", "I'm doing pretty good", "I am doing well", "I am doing good", "I'm doing well", "I'm doing good"],
@@ -42,8 +36,8 @@
         },
                 
         {"tag": "yourewelcome",
-        "patterns": ["thank you", "thanks", "thank you ALICE"],
-        "responses": ["Refreshing the screen now...", "Clearing the screen...", "Screen has been cleared.", "Screen has been refreshed."],
+        "patterns": ["thank you", "thanks", "thank you ALICE", "thank you so much", "thank you very much"],
+        "responses": ["You're welcome!'", "Glad to help!", "Happy to help!", "You are welcome!"],
         "context_set": ""
         }
         
