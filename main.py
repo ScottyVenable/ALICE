@@ -52,7 +52,6 @@ try:
    #  with open("data.pickle", "rb") as f:
    #     words, labels, training, output = pickle.load(f)
     scotty.py
-
 except:
     words = []
     labels = []
@@ -102,14 +101,7 @@ except:
     
     with open("data.pickle", "wb") as f:
         pickle.dump((words, labels, training, output), f)
-   
 
-#try:
-  #   model.load("model.tflearn") #comment out to retrain model!!!!!!
-  #  scotty.py
-#except:
-   # model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
-   # model.save("model.tflearn")
 
 # Create the "Bag of Words"  
 def bag_of_words(s, words):
@@ -182,10 +174,11 @@ def chat():
         menuChoice = 2
     if inp.lower() == "3":
         menuChoice = 3
-
     if inp.lower() == "4":
         menuChoice = 4
 
+
+    # Main Menu Choices
     if menuChoice == 1:
         debugMode = 0
 
@@ -226,6 +219,7 @@ def chat():
             print("Welcome, "+user_name+"!")
             print("------------------")
             print("")
+
     if menuChoice == 2:
         debugMode = 0
         model.load("model.tflearn")
@@ -236,6 +230,7 @@ def chat():
         print("")
         username_id = 999
         user_name = "Guest"           
+
     if menuChoice == 3:
         model.load("model.tflearn")
         exit = 0
@@ -256,27 +251,22 @@ def chat():
         print()
         
         
-
     if exit == 0:
         if reboot == 0:
             while True:
                 alicemessage = "not updated yet."
                 
-            
-
-
-
                 inp = input(user_name + ": ")
 
-                #terminate
+                # Terminate
                 if inp.lower() == "terminate": #shutdown ALICE
                     break
             
-                #no response
+                # No response
                 if inp.lower() == "":
                     print("ALICE: No response given.")
            
-                #test message
+                # Test message
                 if inp.lower() == "test message":
                     alicemessage = "Okay. Let's see if this new function is working."
                     DisplayandSpeak();
@@ -298,8 +288,6 @@ def chat():
                         os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
                         clearConsole()
                         print("ALICE: Welcome back!")
-
-
 
                 results = model.predict([bag_of_words(inp, words)])[0]
                 results_index = numpy.argmax(results)
@@ -394,6 +382,9 @@ def chat():
                     engine.say("I'm sorry, I don't understand.")
                     print("")
                     engine.runAndWait()
+
+
+    # Exit the program
     if exit == 1:
         clearConsole()
         print("Exiting now...")

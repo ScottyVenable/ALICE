@@ -23,8 +23,8 @@
 
     {
       "tag": "howareyou",
-      "patterns": [ "how are you", "hows it going", "how are you today", "hows it going today" ],
-      "responses": [ "I'm alright.", "I'm doing alright", "I'm doing pretty good", "I am doing well", "I am doing good", "I'm doing well", "I'm doing good" ],
+      "patterns": [ "how are you feeling", "hows it going", "how are you feeling today", "how do you feel", "tell me how you feel", "what feelings do you have" ],
+      "responses": [ "I'm feeling ", "I feel ", "Right now I feel "],
       "context_set": ""
     },
 
