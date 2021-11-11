@@ -103,8 +103,8 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)
 
 try:
-    #model.load("model.tflearn") #comment out to retrain model!!!!!!
-    scotty.py
+    model.load("model.tflearn") #comment out to retrain model!!!!!!
+    #scotty.py
 except:
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
@@ -128,7 +128,15 @@ def chat():
     voices = engine.getProperty('voices')  
     engine.setProperty('voice', voices[1].id)
 
+    def DisplayandSpeak():
+        print()
+        print("ALICE: " + alicemessage)
+        print()
+        engine.say(alicemessage)
+        engine.runAndWait()
+        inp = input(user_name + ": ")
 
+    #Main Menu
     
 
     username_id = 0
@@ -173,15 +181,9 @@ def chat():
         while True:
 
             alicemessage = "not updated yet."
-            about_time = 0
+            
 
-            def DisplayandSpeak():
-                print()
-                print("ALICE: " + alicemessage)
-                print()
-                engine.say(alicemessage)
-                engine.runAndWait()
-                inp = input(user_name + ": ")
+
 
             inp = input(user_name + ": ")
 
@@ -230,18 +232,18 @@ def chat():
             tag = labels[results_index]
             
             if results[results_index] > 0.85: # if probability is 85% or higher
-            
+                about_time = 0
+                
                 for tg in data["intents"]:
                     if tg["tag"] == tag:
                         responses = tg['responses']
-                    if tg["tag"] == "time":
-                        about_time = 1
 
-                if about_time == 1:
+                if labels[results_index] == "time":
                     current_time = datetime.datetime.now()
                     chosen_response = random.choice(responses) + current_time.strftime("%I:%M %p")
                 else:
                     chosen_response = random.choice(responses)
+                
 
                 
 
