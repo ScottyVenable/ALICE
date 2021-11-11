@@ -45,7 +45,7 @@
     {
       "tag": "yourewelcome",
       "patterns": [ "thank you", "thanks", "thank you ALICE", "thank you so much", "thank you very much" ],
-      "responses": [ "You're welcome!'", "Glad to help!", "Happy to help!", "You are welcome!" ],
+      "responses": [ "You're welcome!", "Glad to help!", "Happy to help!", "You are welcome!" ],
       "context_set": ""
     },
 
