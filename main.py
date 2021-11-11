@@ -103,8 +103,8 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)
 
 try:
-    model.load("model.tflearn") #comment out to retrain model!!!!!!
-    #scotty.py
+    #model.load("model.tflearn") #comment out to retrain model!!!!!!
+    scotty.py
 except:
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
@@ -173,6 +173,7 @@ def chat():
         while True:
 
             alicemessage = "not updated yet."
+            about_time = 0
 
             def DisplayandSpeak():
                 print()
@@ -214,8 +215,10 @@ def chat():
                     os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
                     clearConsole()
                     print("ALICE: Welcome back!")
-            asktime = ["what time is it?", "what is the time?", "tell me the time?"]
-            if inp.lower() in asktime:
+
+      #      asktime = ["what time is it?", "what is the time?", "tell me the time"]
+      #      if inp.lower() in asktime:
+                results_index = 0
                 current_time = datetime.datetime.now()
                 alicemessage = "The current time is " + current_time.strftime("%I:%M %p")
                 DisplayandSpeak()
@@ -226,16 +229,23 @@ def chat():
             results_index = numpy.argmax(results)
             tag = labels[results_index]
             
-            if results[results_index] > 0.7: # if probability is 70% or higher
+            if results[results_index] > 0.85: # if probability is 85% or higher
             
                 for tg in data["intents"]:
                     if tg["tag"] == tag:
                         responses = tg['responses']
-                    if tg["tag"] == time:
-                        current_time = datetime.datetime.now()
-                        responses = tg['responses'] + " " + current_time
+                    if tg["tag"] == "time":
+                        about_time = 1
+
+                if about_time == 1:
+                    current_time = datetime.datetime.now()
+                    chosen_response = random.choice(responses) + current_time.strftime("%I:%M %p")
+                else:
+                    chosen_response = random.choice(responses)
+
                 
-                chosen_response = random.choice(responses)
+
+                
                 
                 print("")
                 print("ALICE: " + chosen_response)
