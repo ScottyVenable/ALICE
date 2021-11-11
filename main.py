@@ -256,6 +256,7 @@ def chat():
             while True:
                 alicemessage = "not updated yet."
                 
+                print("\033[1;37;40m")
                 inp = input(user_name + ": ")
 
                 # Terminate
@@ -368,17 +369,17 @@ def chat():
                         engine.runAndWait()
 
                     # System Data is not in response
-                    if systemValue == "":
-                        print("")
-                        print("ALICE: " + chosen_response)
-                        print("")
+                    if systemValue == "":   
+                        print()
+                        print("\033[1;36;40mALICE: " + chosen_response)
+                  #     print("A.L.I.C.E: " + chosen_response)
                         engine.say(chosen_response + systemValue)
                         engine.runAndWait()
 
                 # Not understanding recieved message.    
                 else:
                     print()
-                    print("ALICE: I'm sorry, I don't understand.")
+                    print("\033[1;36;40m A.L.I.C.E: I'm sorry, I don't understand.  \n")
                     engine.say("I'm sorry, I don't understand.")
                     print("")
                     engine.runAndWait()
