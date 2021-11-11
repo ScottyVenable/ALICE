@@ -1,5 +1,6 @@
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
+from tensorflow.python.ops.gen_data_flow_ops import accumulator_apply_gradient
 stemmer = LancasterStemmer()
 
 import datetime
@@ -37,6 +38,8 @@ anger_score = 0
 happiness_score = 0
 excitement_score = 0
 boredom_score = 0
+
+
 
 current_mood = "neutral"
 
@@ -112,8 +115,8 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)
 
 try:
-    model.load("model.tflearn") #comment out to retrain model!!!!!!
-   # scotty.py
+  # model.load("model.tflearn") #comment out to retrain model!!!!!!
+    scotty.py
 except:
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
@@ -260,12 +263,11 @@ def chat():
             results = model.predict([bag_of_words(inp, words)])[0]
             results_index = numpy.argmax(results)
             tag = labels[results_index]
-            
-
 
             if results[results_index] > 0.7: # if probability is 70% or higher
-                current_time = datetime.datetime.now()
-
+                
+                
+                systemValue = ""
                 give_time = current_time.strftime("%I:%M %p")
                 give_date = current_time.strftime("%m-%d-%Y")
 
@@ -274,52 +276,71 @@ def chat():
                         responses = tg['responses']
 
                 print(labels[results_index])
-                
+                print(responses)
+        
+                # Display the Date
                 if labels[results_index] == "date":
-                    chosen_response = random.choice(responses) + give_date
+                    current_time = datetime.datetime.now()
+                    chosen_response = random.choice(responses)
+                    systemValue = give_date
 
+                # Display the Time
                 if labels[results_index] == "time":
-                    chosen_response = random.choice(responses) + give_time
+                    current_time = datetime.datetime.now()
+                    chosen_response = random.choice(responses)
+                    systemValue = give_time
                 
-                else:
+                # Display Emotional Data
+                if labels[results_index] == "displayemotions":
+
+                    happinessScoreString = str(happiness_score)
+                    sadnessScoreString = str(sadness_score)
+                    angerScoreString = str(anger_score)
+                    excitementScoreString = str(excitement_score)
+                    boredomScoreString = str(boredom_score)
+
+                    chosen_response = random.choice(responses)
+                    systemValue = "[Happiness: " + happinessScoreString + "], [Sadness: " + sadnessScoreString + "], [Anger: " + angerScoreString + "], [Excitement: " + excitementScoreString + "], [Boredom: " + boredomScoreString + "]"
+
+
+                # Clear the Screen
+                if labels[results_index] == "clearscreen":
+                    clearConsole()
                     chosen_response = random.choice(responses)
 
-
-
-
-
-
-
+                
+                
+                # Moods/Emotions
                 if sadness_score > 5 and 'sad' in mood_tags:
                     current_mood = "sad"
-
                 if anger_score > 5 and 'frustrated' in mood_tags:
                     current_mood = "frustrated"
-
                 if happiness_score > 5:
                     current_mood = "happy"
-
                 if happiness_score > 10:
                     current_mood = "elated"
-
                 if excitement_score > 5:
                     current_mood = "excited"
-
                 if boredom_score > 5:
                     current_mood = "bored"
+        
+                # System Data in response
+                if systemValue != "":
+                    print("")
+                    print("ALICE: " + chosen_response + systemValue)
+                    print("")
+                    engine.say(chosen_response + systemValue)
+                    engine.runAndWait()
 
-                
+                # System Data is not in response
+                else:
+                    print("")
+                    print("ALICE: " + chosen_response)
+                    print("")
+                    engine.say(chosen_response + systemValue)
+                    engine.runAndWait()
 
-                
-
-                
-                
-                print("")
-                print("ALICE: " + chosen_response)
-                print("")
-                engine.say(chosen_response)
-                engine.runAndWait()
-                
+            # Not understanding recieved message.    
             else:
                 print()
                 print("ALICE: I'm sorry, I don't understand.")

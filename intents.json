@@ -71,12 +71,34 @@
     },
 
     {
-      "tag": "whats_up",
-      "patterns": [ "whats up", "what are you up to", "what are you doing" ]
+      "tag": "whatsup",
+      "patterns": [ "whats up", "what are you up to", "what are you doing" ],
       "responses": [
         "Mostly analyzing my data. What about you?",
         "I'm just learning. My neurons are creating pathways as we speak!",
         "Analyzing some data. I'm trying to develop more and more each day!"
+      ]
+    },
+
+    {
+      "tag": "displayemotions",
+      "patterns": [ "display emotion data", "display your emotions", "what is your emotional data", "tell me your emotions", "display emotional data" ],
+      "responses": [
+        "Current emotional data: ",
+        "Displaying current emotional data: ",
+        "Current emotion levels: ",
+        "Emotional levels: "
+      ]
+    },
+
+    {
+      "tag": "clearscreen",
+      "patterns": [ "clear the screen", "clear screen", "cls screen", "cls", "clear interactions", "clear messages", "clear all messages"],
+      "responses": [
+        "Screen has been cleared.",
+        "I have cleared the screen.",
+        "Screen clear successful!",
+        "I have cleared the screen for you."
       ]
     }
 
