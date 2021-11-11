@@ -65,9 +65,19 @@
 
     {
       "tag": "whoareyou",
-      "patterns": [ "who are you", "what is your name", "what does your name mean", "who is this", "who am I talking to", "who am I chatting with"],
+      "patterns": [ "who are you", "what is your name", "what does your name mean", "who is this", "who am I talking to", "who am I chatting with" ],
       "responses": [ "My name is ALICE. ", "I am ALICE", "My name is ALICE. My full name is Always Learning Interactive Companion Engine. But I prefer ALICE for short!", "I am the Always Learning Interactive Companion Engine, but you can call me ALICE for short!" ],
       "context_set": ""
+    },
+
+    {
+      "tag": "whats_up",
+      "patterns": [ "whats up", "what are you up to", "what are you doing" ]
+      "responses": [
+        "Mostly analyzing my data. What about you?",
+        "I'm just learning. My neurons are creating pathways as we speak!",
+        "Analyzing some data. I'm trying to develop more and more each day!"
+      ]
     }
 
 

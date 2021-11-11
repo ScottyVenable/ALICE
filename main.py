@@ -32,7 +32,16 @@ def clearConsole():
     os.system(command)
 
 
+sadness_score = 0
+anger_score = 0
+happiness_score = 0
+excitement_score = 0
+boredom_score = 0
 
+current_mood = "neutral"
+
+mood_tags = []
+emotions = [sadness_score, anger_score, happiness_score, excitement_score, boredom_score]
 
 
 
@@ -275,6 +284,29 @@ def chat():
                 else:
                     chosen_response = random.choice(responses)
 
+
+
+
+
+
+
+                if sadness_score > 5 and 'sad' in mood_tags:
+                    current_mood = "sad"
+
+                if anger_score > 5 and 'frustrated' in mood_tags:
+                    current_mood = "frustrated"
+
+                if happiness_score > 5:
+                    current_mood = "happy"
+
+                if happiness_score > 10:
+                    current_mood = "elated"
+
+                if excitement_score > 5:
+                    current_mood = "excited"
+
+                if boredom_score > 5:
+                    current_mood = "bored"
 
                 
 
