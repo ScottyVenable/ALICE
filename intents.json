@@ -1,52 +1,78 @@
-{"intents": [
-        {"tag": "greeting",
-        "patterns": ["hi", "hey", "hello", "greetings"],
-        "responses": ["Hello", "Hi", "Hey", "Hey there", "Greetings"],
-        "context_set": ""
-        },
-        
-        {"tag": "goodbye",
-        "patterns": ["bye", "goodbye", "see you", "see you later", "see ya"],
-        "responses": ["Goodbye", "Bye", "See you later", "Have a good rest of your day", "Alright! I'll see you later"],
-        "context_set": ""
-        },
-        
-        {"tag": "weather",
-        "patterns": ["whats the weather", "check the weather", "whats the weather outside", "what is the weather", "what is the weather outside", "what is the weather today", "whats the weather today", "tell me the weather", "give me the weather", "weather report", "let me know the weather", "give the weather"],
-        "responses": ["The weather outside is ", "Outside it is ", "The weather is ", "Right now it is "],
-        "context_set": ""
-        },
-        
-        {"tag": "howareyou",
-        "patterns": ["how are you", "hows it going", "how are you today", "hows it going today"],
-        "responses": ["I'm alright.", "I'm doing alright", "I'm doing pretty good", "I am doing well", "I am doing good", "I'm doing well", "I'm doing good"],
-        "context_set": ""   
-        },
-        
-        {"tag": "sympathy_mistake",
-        "patterns": ["thats not okay", "bad alice", "youre bad", "not okay", "thats horrible of you", "you did a bad thing", "that is very bad of you", "you shouldn't have done that", "you hurt me", "you hurt my feelings", "you aren't nice", "say youre sorry", "say sorry"],
-        "responses": ["I'm sorry.", "Oh, I'm sorry.", "My apologies.", "Oh, my apologies.", "I'm so sorry", "I'm sorry. I'll work on that."],
-        "context_set": ""
-        },
-        
-        {"tag": "praise",
-        "patterns": ["good job", "great job", "awesome job", "you did so good", "you are awesome", "you are doing amazing", "im so proud of you", "you make me so proud", "very great job", "yes you did so good", "thats some amazing work", "very well done", "well done"],
-        "responses": ["Thank you so much!", "Thank you!", "I'm glad I am living up to your standards!", "Thank you very much!", "Thank you so much. That makes me feel so nice.", "Thank you for that!"],
-        "context_set": ""
-        },
-                
-        {"tag": "yourewelcome",
-        "patterns": ["thank you", "thanks", "thank you ALICE", "thank you so much", "thank you very much"],
-        "responses": ["You're welcome!'", "Glad to help!", "Happy to help!", "You are welcome!"],
-        "context_set": ""
-        },
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [ "hi", "hey", "hello", "greetings" ],
+      "responses": [ "Hello", "Hi", "Hey", "Hey there", "Greetings" ],
+      "context_set": ""
+    },
 
-        {
-          "tag": "time",
-          "patterns": [ "what time is it", "what is the time", "tell me the time", "give me the time", "give me the current time" ],
-          "responses": [ "It is currently: ", "It is: ", "The time right now is: "],
-          "context_set": ""
-        }
+    {
+      "tag": "goodbye",
+      "patterns": [ "bye", "goodbye", "see you", "see you later", "see ya" ],
+      "responses": [ "Goodbye", "Bye", "See you later", "Have a good rest of your day", "Alright! I'll see you later" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "weather",
+      "patterns": [ "whats the weather", "check the weather", "whats the weather outside", "what is the weather", "what is the weather outside", "what is the weather today", "whats the weather today", "tell me the weather", "give me the weather", "weather report", "let me know the weather", "give the weather" ],
+      "responses": [ "The weather outside is ", "Outside it is ", "The weather is ", "Right now it is " ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "howareyou",
+      "patterns": [ "how are you", "hows it going", "how are you today", "hows it going today" ],
+      "responses": [ "I'm alright.", "I'm doing alright", "I'm doing pretty good", "I am doing well", "I am doing good", "I'm doing well", "I'm doing good" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "sympathy_mistake",
+      "patterns": [ "thats not okay", "bad alice", "youre bad", "not okay", "thats horrible of you", "you did a bad thing", "that is very bad of you", "you shouldn't have done that", "you hurt me", "you hurt my feelings", "you aren't nice", "say youre sorry", "say sorry" ],
+      "responses": [ "I'm sorry.", "Oh, I'm sorry.", "My apologies.", "Oh, my apologies.", "I'm so sorry", "I'm sorry. I'll work on that." ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "praise",
+      "patterns": [ "good job", "great job", "awesome job", "you did so good", "you are awesome", "you are doing amazing", "im so proud of you", "you make me so proud", "very great job", "yes you did so good", "thats some amazing work", "very well done", "well done" ],
+      "responses": [ "Thank you so much!", "Thank you!", "I'm glad I am living up to your standards!", "Thank you very much!", "Thank you so much. That makes me feel so nice.", "Thank you for that!" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "yourewelcome",
+      "patterns": [ "thank you", "thanks", "thank you ALICE", "thank you so much", "thank you very much" ],
+      "responses": [ "You're welcome!'", "Glad to help!", "Happy to help!", "You are welcome!" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "time",
+      "patterns": [ "what time is it", "what is the time", "tell me the time", "give me the time", "give me the current time" ],
+      "responses": [ "It is currently ", "It is ", "The time right now is " ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "date",
+      "patterns": [ "whats the date", "what is the date today", "tell me the date", "give me the date", "give me the current date" ],
+      "responses": [ "The date today is ", "It is ", "The date is ", "The current date is " ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "whoareyou",
+      "patterns": [ "who are you", "what is your name", "what does your name mean", "who is this", "who am I talking to", "who am I chatting with"],
+      "responses": [ "My name is ALICE. ", "I am ALICE", "My name is ALICE. My full name is Always Learning Interactive Companion Engine. But I prefer ALICE for short!", "I am the Always Learning Interactive Companion Engine, but you can call me ALICE for short!" ],
+      "context_set": ""
+    }
 
 
-]}
+
+
+
+  ]
+}

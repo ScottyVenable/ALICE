@@ -37,8 +37,8 @@ def clearConsole():
 
 
 try: 
-    # with open("data.pickle", "rb") as f:
-       # words, labels, training, output = pickle.load(f)
+   #  with open("data.pickle", "rb") as f:
+   #     words, labels, training, output = pickle.load(f)
     scotty.py
 
 except:
@@ -104,7 +104,7 @@ model = tflearn.DNN(net)
 
 try:
     model.load("model.tflearn") #comment out to retrain model!!!!!!
-    #scotty.py
+   # scotty.py
 except:
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
@@ -137,46 +137,67 @@ def chat():
         inp = input(user_name + ": ")
 
     #Main Menu
-    
+    menuChoice = 0
+    clearConsole()
 
-    username_id = 0
-    logon_successful = 0
+    print("Welcome to A.L.I.C.E")
+    print("--------------------")
+    print("1. Login")
+    print("2. Guest Login")
+    print("3. Exit")
+    print("--------------------")
+    inp = input("> ")
+
+    if inp.lower() == "1":
+        menuChoice = 1
+    if inp.lower() == "2":
+        menuChoice = 2
+    if inp.lower() == "3":
+        pass
+
+    if menuChoice == 1:
+        clearConsole()
+        username_id = 0
+        logon_successful = 0
     
-    inp = input("Username: ")
+        inp = input("Username: ")
     
-    if inp.lower() == "scotty":
-        username_id = 1
+        if inp.lower() == "scotty":
+            username_id = 1
     
-    if inp.lower() == "liam":
-        username_id = 2
+        if inp.lower() == "liam":
+            username_id = 2
         
-    inp = input("Password: ")
+        inp = input("Password: ")
     
-    # Login Scotty
-    if username_id == 1 and inp.lower() == "scotty2hotty":
-        logon_successful = 1
-        user_name = "Scotty"
+        # Login Scotty
+        if username_id == 1 and inp.lower() == "scotty2hotty":
+            logon_successful = 1
+            user_name = "Scotty"
         
-    #Login Liam
-    if username_id == 2 and inp.lower() == "fortnite":
-        logon_successful = 1
-        user_name = "Liam"
+        #Login Liam
+        if username_id == 2 and inp.lower() == "fortnite":
+            logon_successful = 1
+            user_name = "Liam"
     
-    if logon_successful != 1:
-        os.system('cls')
-        print("LOGIN FAILED")
-        inp = input("> ")
-    else:
-        os.system('cls')
-        print("Login Successful!")
-        print("Welcome, "+user_name+"!")
+        if logon_successful != 1:
+            os.system('cls')
+            print("LOGIN FAILED")
+            inp = input("> ")
+        else:
+            os.system('cls')
+            print("Login Successful!")
+            print("Welcome, "+user_name+"!")
+            print("------------------")
+            print("")
+    if menuChoice == 2:
+        clearConsole()
+        print("Welcome, Guest!")
         print("------------------")
         print("")
-    
-        
-        
-    
-    
+        username_id = 999
+        user_name = "Guest"  
+         
     
         while True:
 
@@ -231,18 +252,30 @@ def chat():
             results_index = numpy.argmax(results)
             tag = labels[results_index]
             
-            if results[results_index] > 0.85: # if probability is 85% or higher
-                about_time = 0
-                
+
+
+            if results[results_index] > 0.7: # if probability is 70% or higher
+                current_time = datetime.datetime.now()
+
+                give_time = current_time.strftime("%I:%M %p")
+                give_date = current_time.strftime("%m-%d-%Y")
+
                 for tg in data["intents"]:
                     if tg["tag"] == tag:
                         responses = tg['responses']
 
+                print(labels[results_index])
+                
+                if labels[results_index] == "date":
+                    chosen_response = random.choice(responses) + give_date
+
                 if labels[results_index] == "time":
-                    current_time = datetime.datetime.now()
-                    chosen_response = random.choice(responses) + current_time.strftime("%I:%M %p")
+                    chosen_response = random.choice(responses) + give_time
+                
                 else:
                     chosen_response = random.choice(responses)
+
+
                 
 
                 
