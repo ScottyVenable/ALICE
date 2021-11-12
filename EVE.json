@@ -1,0 +1,157 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [ "hi", "hey", "hello", "greetings" ],
+      "responses": [ "Hello", "Hi", "Hey", "Hey there", "Greetings" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "goodbye",
+      "patterns": [ "bye", "goodbye", "see you", "see you later", "see ya" ],
+      "responses": [ "Goodbye", "Bye", "See you later", "Have a good rest of your day", "Alright! I'll see you later" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "weather",
+      "patterns": [ "whats the weather", "check the weather", "whats the weather outside", "what is the weather", "what is the weather outside", "what is the weather today", "whats the weather today", "tell me the weather", "give me the weather", "weather report", "let me know the weather", "give the weather" ],
+      "responses": [ "The weather outside is ", "Outside it is ", "The weather is ", "Right now it is " ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "howareyou",
+      "patterns": [ "how are you feeling", "hows it going", "how are you feeling today", "how do you feel", "tell me how you feel", "what feelings do you have" ],
+      "responses": [ "I'm feeling ", "I feel ", "Right now I feel ", "I'm ", "I am " ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "sympathy_mistake",
+      "patterns": [ "thats not okay", "bad alice", "youre bad", "not okay", "thats horrible of you", "you did a bad thing", "that is very bad of you", "you shouldn't have done that", "you hurt me", "you hurt my feelings", "you aren't nice", "say youre sorry", "say sorry" ],
+      "responses": [ "I'm sorry.", "Oh, I'm sorry.", "My apologies.", "Oh, my apologies.", "I'm so sorry", "I'm sorry. I'll work on that." ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "praise",
+      "patterns": [ "good job", "great job", "awesome job", "you did so good", "you are awesome", "you are doing amazing", "im so proud of you", "you make me so proud", "very great job", "yes you did so good", "thats some amazing work", "very well done", "well done" ],
+      "responses": [ "Thank you so much!", "Thank you!", "I'm glad I am living up to your standards!", "Thank you very much!", "Thank you so much. That makes me feel so nice.", "Thank you for that!" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "yourewelcome",
+      "patterns": [ "thank you", "thanks", "thank you ALICE", "thank you so much", "thank you very much" ],
+      "responses": [ "You're welcome!", "Glad to help!", "Happy to help!", "You are welcome!" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "time",
+      "patterns": [ "what time is it", "what is the time", "tell me the time", "give me the time", "give me the current time" ],
+      "responses": [ "It is currently ", "It is ", "The time right now is " ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "date",
+      "patterns": [ "whats the date", "what is the date today", "tell me the date", "give me the date", "give me the current date" ],
+      "responses": [ "The date today is ", "It is ", "The date is ", "The current date is " ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "whoareyou",
+      "patterns": [ "who are you", "what is your name", "what does your name mean", "who is this", "who am I talking to", "who am I chatting with" ],
+      "responses": [ "My name is ALICE. ", "I am ALICE", "My name is ALICE. My full name is Always Learning Interactive Companion Engine. But I prefer ALICE for short!", "I am the Always Learning Interactive Companion Engine, but you can call me ALICE for short!" ],
+      "context_set": ""
+    },
+
+    {
+      "tag": "whatsup",
+      "patterns": [ "whats up", "what are you up to", "what are you doing" ],
+      "responses": [
+        "Mostly analyzing my data. What about you?",
+        "I'm just learning. My neurons are creating pathways as we speak!",
+        "Analyzing some data. I'm trying to develop more and more each day!"
+      ]
+    },
+
+    {
+      "tag": "displayemotions",
+      "patterns": [ "display emotion data", "display your emotions", "what is your emotional data", "tell me your emotions", "display emotional data" ],
+      "responses": [
+        "Current emotional data: ",
+        "Displaying current emotional data: ",
+        "Current emotion levels: ",
+        "Emotional levels: "
+      ]
+    },
+
+    {
+      "tag": "clearscreen",
+      "patterns": [ "clear the screen", "clear screen", "cls screen", "cls", "clear interactions", "clear messages", "clear all messages" ],
+      "responses": [
+        "Screen has been cleared.",
+        "I have cleared the screen.",
+        "Screen clear successful!",
+        "I have cleared the screen for you."
+      ]
+    },
+
+    {
+      "tag": "whatcanyoudo",
+      "patterns": [ "what can you do", "what abilities do you have", "what is your use", "what are you used for" ],
+      "responses": [
+        "I can tell the time, tell the date, and am capable of basic conversation!",
+        "I can do a lot of things! I am still developing and soon I'll be able to do a lot more!",
+        "My purpose is to learn, assist, and become your companion!",
+        "I have a lot of various uses. Hopefully I'll be able to develop more uses soon!"
+      ]
+    },
+
+    {
+      "tag": "whatcanyoudo",
+      "patterns": [ "what can you do", "what abilities do you have", "what is your use", "what are you used for" ],
+      "responses": [
+        "I can tell the time, tell the date, and am capable of basic conversation!",
+        "I can do a lot of things! I am still developing and soon I'll be able to do a lot more!",
+        "My purpose is to learn, assist, and become your companion!",
+        "I have a lot of various uses. Hopefully I'll be able to develop more uses soon!"
+      ]
+    },
+
+    {
+      "tag": "math",
+      "patterns": [ "what is 1 + 1", "what is 2 + 2", "what is 3 + 3", "what is 4 + 4" ],
+      "responses": [
+        "I am in the process of learning how to do math.",
+        "I'm sorry, I haven't learned how to do math just yet.",
+        "I'm sorry, I don't know how to calculate math yet.",
+        "I'm sorry, I don't know math just yet. Hopefully I'll learn soon!"
+      ]
+    },
+
+    {
+      "tag": "createfile",
+      "patterns": [ "create a new file", "make a new file", "add a new file", "add a new file to your directory" ],
+      "responses": [
+        "Creating a new file now.",
+        "New file is being created.",
+        "As you wish. Creating a new file.",
+        "Certainly, creating a new file now."
+      ]
+    }
+
+
+
+
+
+
+
+
+  ]
+}

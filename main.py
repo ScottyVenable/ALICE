@@ -19,11 +19,12 @@ import tkinter
 from tkinter import *
 import subprocess
 import time
+import re
+import math
 
 
 
-
-with open("intents.json") as file:
+with open("EVE.json") as file:
     data = json.load(file)
 
 def clearConsole():
@@ -38,7 +39,6 @@ def clearConsole():
 
 
 current_mood = "neutral"
-
 mood_tags = []
 
 
@@ -247,6 +247,20 @@ def chat():
 
     if menuChoice == 4:
         exit = 1
+        clearConsole()
+        print("Deleting previous training model...")
+        os.remove("model.tflearn.data-00000-of-00001")
+        os.remove("model.tflearn.index")
+        os.remove("model.tflearn.meta")
+        time.sleep(2)
+        print("SUCCESS: Previous model removed!")
+        time.sleep(1)
+        clearConsole()
+        print("Getting ready to train neural network data...")
+        time.sleep(1)
+        print("Please do not terminate until finished!")
+        time.sleep(3)
+        clearConsole()
         TrainNewModel()
         clearConsole()
         print("Model Training Successful!")
@@ -259,6 +273,14 @@ def chat():
             while True:
                 alicemessage = "not updated yet."
                 
+                # Math Substrings
+                mathProblem = ""
+                isMathProblem = False
+
+                mathAddition = ["+", "plus"]
+                mathSubtraction = ["-", "minus"]
+                mathMultiply = ["*", "times"]
+                mathDivide = ["/", "divided by"]
 
                
                 print("\033[1;37;40m")
@@ -294,6 +316,8 @@ def chat():
                         os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
                         clearConsole()
                         print("ALICE: Welcome back!")
+
+                    
 
                 results = model.predict([bag_of_words(inp, words)])[0]
                 results_index = numpy.argmax(results)
@@ -349,8 +373,11 @@ def chat():
                         excitementScoreString = str(excitement_score)
                         boredomScoreString = str(boredom_score)
 
+                        
                         chosen_response = random.choice(responses)
-                        systemValue = "[Happiness: " + happinessScoreString + "], [Sadness: " + sadnessScoreString + "], [Anger: " + angerScoreString + "], [Excitement: " + excitementScoreString + "], [Boredom: " + boredomScoreString + "]"
+                        alicemessage = "Displaying current emotional data: \n"
+
+                        systemValue = "\n \n  [Happiness: " + happinessScoreString + "],\n [Sadness: " + sadnessScoreString + "],\n [Anger: " + angerScoreString + "],\n [Excitement: " + excitementScoreString + "],\n [Boredom: " + boredomScoreString + "]"
 
                     # Clear the Screen
                     if labels[results_index] == "clearscreen":
@@ -382,6 +409,16 @@ def chat():
                             current_mood = "bored"
                         chosen_response = random.choice(responses)
                         systemValue = current_mood
+
+                    if labels[results_index] == "math":
+                        mathString = inp
+                        map(int, re.findall(r'\d+', mathString))
+                        [mathString]
+                        print(mathString)
+
+                    if labels[results_index] == "newfile":
+                        open("newfile.text", "x")
+                        chosen_response = random.choice(responses)
 
                     # System Data in response
                     if systemValue != "":
