@@ -33,18 +33,13 @@ def clearConsole():
     os.system(command)
 
 
-sadness_score = 0
-anger_score = 0
-happiness_score = 0
-excitement_score = 0
-boredom_score = 0
+
 
 
 
 current_mood = "neutral"
 
 mood_tags = []
-emotions = [sadness_score, anger_score, happiness_score, excitement_score, boredom_score]
 
 
 
@@ -119,6 +114,13 @@ def bag_of_words(s, words):
 
 
 def chat():
+    current_mood = "neutral"
+    sadness_score = 0
+    anger_score = 0
+    happiness_score = 0
+    excitement_score = 0
+    boredom_score = 0
+
     def TrainNewModel():
         tf.compat.v1.reset_default_graph()
 
@@ -157,6 +159,7 @@ def chat():
     menuChoice = 0
     reboot = 0
     clearConsole()
+
 
     print("Welcome to A.L.I.C.E")
     print("--------------------")
@@ -256,6 +259,8 @@ def chat():
             while True:
                 alicemessage = "not updated yet."
                 
+
+               
                 print("\033[1;37;40m")
                 inp = input(user_name + ": ")
 
@@ -303,6 +308,12 @@ def chat():
                     systemValue = ""
                     give_time = current_time.strftime("%I:%M %p")
                     give_date = current_time.strftime("%m-%d-%Y")
+                    
+
+                    
+
+                    
+                    
 
                     for tg in data["intents"]:
                         if tg["tag"] == tag:
@@ -319,6 +330,10 @@ def chat():
                     if labels[results_index] == "date":   
                         chosen_response = random.choice(responses)
                         systemValue = give_date
+
+                    if labels[results_index] == "howareyou":
+                        chosen_response = random.choice(responses)
+                        systemValue = current_mood
 
                     # Display the Time
                     if labels[results_index] == "time":
@@ -343,28 +358,35 @@ def chat():
                         chosen_response = random.choice(responses)
 
                 
-                
-                    # Moods/Emotions
-                    if sadness_score > 5 and 'sad' in mood_tags:
-                        current_mood = "sad"
-                    if anger_score > 5 and 'frustrated' in mood_tags:
-                        current_mood = "frustrated"
-                    if happiness_score > 5:
-                        current_mood = "happy"
-                    if happiness_score > 10:
-                        current_mood = "elated"
-                    if excitement_score > 5:
-                        current_mood = "excited"
-                    if boredom_score > 5:
-                        current_mood = "bored"
-
+                  
                     chosen_response = random.choice(responses)
+                    
+                    if labels[results_index] == "praise":
+                        happiness_score = happiness_score + 1
+                        chosen_response = random.choice(responses)
+                     
+                        # Moods/Emotions
+                    if labels[results_index] == "howareyou":
+
+                        if sadness_score > 5 and 'sad' in mood_tags:
+                            current_mood = "sad"
+                        if anger_score > 5 and 'frustrated' in mood_tags:
+                            current_mood = "frustrated"
+                        if happiness_score > 5:
+                            current_mood = "happy"
+                        if happiness_score > 10:
+                            current_mood = "elated"
+                        if excitement_score > 5:
+                            current_mood = "excited"
+                        if boredom_score > 5:
+                            current_mood = "bored"
+                        chosen_response = random.choice(responses)
+                        systemValue = current_mood
 
                     # System Data in response
                     if systemValue != "":
-                        print("")
-                        print("ALICE: " + chosen_response + systemValue)
-                        print("")
+                        print()
+                        print("\033[1;36;40mALICE: " + chosen_response + systemValue)
                         engine.say(chosen_response + systemValue)
                         engine.runAndWait()
 

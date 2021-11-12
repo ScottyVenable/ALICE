@@ -24,7 +24,7 @@
     {
       "tag": "howareyou",
       "patterns": [ "how are you feeling", "hows it going", "how are you feeling today", "how do you feel", "tell me how you feel", "what feelings do you have" ],
-      "responses": [ "I'm feeling ", "I feel ", "Right now I feel "],
+      "responses": [ "I'm feeling ", "I feel ", "Right now I feel ", "I'm ", "I am " ],
       "context_set": ""
     },
 
@@ -93,14 +93,37 @@
 
     {
       "tag": "clearscreen",
-      "patterns": [ "clear the screen", "clear screen", "cls screen", "cls", "clear interactions", "clear messages", "clear all messages"],
+      "patterns": [ "clear the screen", "clear screen", "cls screen", "cls", "clear interactions", "clear messages", "clear all messages" ],
       "responses": [
         "Screen has been cleared.",
         "I have cleared the screen.",
         "Screen clear successful!",
         "I have cleared the screen for you."
       ]
+    },
+
+    {
+      "tag": "whatcanyoudo",
+      "patterns": [ "what can you do", "what abilities do you have", "what is your use", "what are you used for" ],
+      "responses": [
+        "I can tell the time, tell the date, and am capable of basic conversation!",
+        "I can do a lot of things! I am still developing and soon I'll be able to do a lot more!",
+        "My purpose is to learn, assist, and become your companion!",
+        "I have a lot of various uses. Hopefully I'll be able to develop more uses soon!"
+      ]
+    },
+
+    {
+      "tag": "whatcanyoudo",
+      "patterns": [ "what can you do", "what abilities do you have", "what is your use", "what are you used for" ],
+      "responses": [
+        "I can tell the time, tell the date, and am capable of basic conversation!",
+        "I can do a lot of things! I am still developing and soon I'll be able to do a lot more!",
+        "My purpose is to learn, assist, and become your companion!",
+        "I have a lot of various uses. Hopefully I'll be able to develop more uses soon!"
+      ]
     }
+
 
 
 
