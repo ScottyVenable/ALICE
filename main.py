@@ -21,6 +21,9 @@ import subprocess
 import time
 import re
 import math
+from os.path import exists
+import shutil
+
 
 
 
@@ -271,8 +274,10 @@ def chat():
     if exit == 0:
         if reboot == 0:
             while True:
+                errorCodesList = ["Duplicate file already exists.", "No input given."]
                 alicemessage = "not updated yet."
-                
+                errorMessage = False
+
                 # Math Substrings
                 mathProblem = ""
                 isMathProblem = False
@@ -281,7 +286,6 @@ def chat():
                 mathSubtraction = ["-", "minus"]
                 mathMultiply = ["*", "times"]
                 mathDivide = ["/", "divided by"]
-
                
                 print("\033[1;37;40m")
                 inp = input(user_name + ": ")
@@ -416,24 +420,59 @@ def chat():
                         [mathString]
                         print(mathString)
 
-                    if labels[results_index] == "newfile":
-                        open("newfile.text", "x")
-                        chosen_response = random.choice(responses)
+                    if labels[results_index] == "createfile":
+                        print()
+                        alicemessage = "What would you like to name the file? Please include the file extension."
+                        print("\033[1;36;40mA.L.I.C.E: " + alicemessage)
+                        print("\033[1;30;40m")
+                        fileName = input("File Name: ")
+                        fileFolder = "files"
+                        fileFolder = (os.path.join(fileFolder, fileName))
+                        fileExists = os.path.exists(fileFolder)
+                        if not os.path.exists("files"):
+                            os.makedirs("files")
+                            
+
+                        if fileExists == False:
+                            print(fileFolder)
+                            open(fileFolder, 'x')
+                            systemValue = fileName
+                            chosen_response = random.choice(responses)
+                            errorMessage = False
+                        
+                        if fileExists == True:
+                            errorMessage = True
+                            errorCode = 1
+
+                        
 
                     # System Data in response
                     if systemValue != "":
-                        print()
-                        print("\033[1;36;40mALICE: " + chosen_response + systemValue)
-                        engine.say(chosen_response + systemValue)
-                        engine.runAndWait()
+                        if errorMessage == False:
+                            print()
+                            print("\033[1;36;40mALICE: " + chosen_response + systemValue)
+                            engine.say(chosen_response + systemValue)
+                            engine.runAndWait()
+                        if errorMessage == True:
+                            print()
+                            print("\033[1;31;40m An error has occurred! (00" + fileErrorCode + ")")
+                            print(errorCodesList[errorCode])
 
                     # System Data is not in response
-                    if systemValue == "":   
-                        print()
-                        print("\033[1;36;40mALICE: " + chosen_response)
-                  #     print("A.L.I.C.E: " + chosen_response)
-                        engine.say(chosen_response + systemValue)
-                        engine.runAndWait()
+                    if systemValue == "":
+                        if errorMessage == False:
+                            print()
+                            print("\033[1;36;40mALICE: " + chosen_response)
+                      #     print("A.L.I.C.E: " + chosen_response)
+                            engine.say(chosen_response + systemValue)
+                            engine.runAndWait()
+                        if errorMessage == True:
+                            print()
+                            errorCodeasStr = str(errorCode)
+
+                            print("\033[1;31;40mAn error has occurred!")
+                            print("error code: (" + errorCodeasStr + ")")
+                            print('"' + errorCodesList[errorCode] + '"')
 
                 # Not understanding recieved message.    
                 else:

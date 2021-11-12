@@ -139,10 +139,19 @@
       "tag": "createfile",
       "patterns": [ "create a new file", "make a new file", "add a new file", "add a new file to your directory" ],
       "responses": [
-        "Creating a new file now.",
-        "New file is being created.",
-        "As you wish. Creating a new file.",
-        "Certainly, creating a new file now."
+        "Created a new file called: ",
+        "File created: ",
+        "File has been created: "
+      ]
+    },
+
+    {
+      "tag": "errorcreatingfile",
+      "patterns": [],
+      "responses": [
+        "It looks like there was an error in creating your file.",
+        "It seems as though I've run into an error.",
+        "It looks as though I ran into an error creating your file."
       ]
     }
 
