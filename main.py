@@ -1,5 +1,6 @@
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
+from numpy.lib.function_base import delete
 from tensorflow.python.ops.gen_data_flow_ops import accumulator_apply_gradient
 stemmer = LancasterStemmer()
 
@@ -116,6 +117,85 @@ def bag_of_words(s, words):
                 
     return numpy.array(bag)
 
+    def TrainNewModel():
+        tf.compat.v1.reset_default_graph()
+
+        net = tflearn.input_data(shape=[None, len(training[0])])
+        net = tflearn.fully_connected(net, 8)
+        net = tflearn.fully_connected(net, 8)
+        net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
+        net = tflearn.regression(net)
+
+        model = tflearn.DNN(net)
+        model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
+        model.save("model.tflearn")
+    tf.compat.v1.reset_default_graph()
+
+    net = tflearn.input_data(shape=[None, len(training[0])])
+    net = tflearn.fully_connected(net, 8)
+    net = tflearn.fully_connected(net, 8)
+    net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
+    net = tflearn.regression(net)
+
+    model = tflearn.DNN(net)
+
+
+def newTrainingModel():
+
+    textcolorRed = '\033[1;31;40m'
+    textcolorALICE = '\033[1;36;40m'
+    textcolorUsername = '\033[1;33;40m'
+    textcolorWhite = '\033[1;37;40m'
+    textcolorGray = '\033[1;30;40m'
+    textcolorGreen = '\033[1;32;40m'
+    consoleSize = 'mode 50, 30'
+
+    loading = "Deleting previous training model"
+
+    clearConsole()
+    deleteWait = 0
+    print(loading)
+    engine.say("Deleting previous training model")
+    engine.runAndWait()
+
+    while deleteWait < 18:
+        deleteWait = deleteWait + 1
+        time.sleep(0.02)
+        clearConsole()
+        loading+=str(".")
+        print(loading)
+
+    os.remove("model.tflearn.data-00000-of-00001")
+    os.remove("model.tflearn.index")
+    os.remove("model.tflearn.meta")
+    print()
+    time.sleep(2)
+    print("SUCCESS: Previous model removed!")
+    time.sleep(1)
+    clearConsole()
+    print("Getting ready to train neural network data...")
+    time.sleep(1)
+    print(textcolorRed + "Please do not terminate until finished!" + textcolorWhite)
+    time.sleep(3)
+    clearConsole()
+    
+    tf.compat.v1.reset_default_graph()
+
+    net = tflearn.input_data(shape=[None, len(training[0])])
+    net = tflearn.fully_connected(net, 8)
+    net = tflearn.fully_connected(net, 8)
+    net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
+    net = tflearn.regression(net)
+
+    model = tflearn.DNN(net)
+    model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
+    model.save("model.tflearn")
+
+    clearConsole()
+    print(textcolorGreen + "Model Training Successful!" + textcolorGreen)
+    engine.say("model training successful!")
+    engine.runAndWait()
+    time.sleep(1)
 
 def chat():
     numberList = [1,2,3,4,5,6,7,8,9]
@@ -142,6 +222,12 @@ def chat():
     textcolorGreen = '\033[1;32;40m'
     consoleSize = 'mode 50, 30'
     os.system(consoleSize)
+
+        
+
+
+
+
 
     programVersion = 0.1
     programVersionStr = str(programVersion)
@@ -302,26 +388,31 @@ def chat():
 
     # Train
     if menuChoice == 3:
-        exit = 1
-        clearConsole()
-        print("Deleting previous training model...")
-        os.remove("model.tflearn.data-00000-of-00001")
-        os.remove("model.tflearn.index")
-        os.remove("model.tflearn.meta")
-        time.sleep(2)
-        print("SUCCESS: Previous model removed!")
-        time.sleep(1)
-        clearConsole()
-        print("Getting ready to train neural network data...")
-        time.sleep(1)
-        print("Please do not terminate until finished!")
-        time.sleep(3)
-        clearConsole()
-        TrainNewModel()
-        clearConsole()
-        print("Model Training Successful!")
-        time.sleep(1)
-        print()
+        trainingmodelExists = False
+        if trainingmodelExists == True:
+            exit = 1
+            clearConsole()
+            print("Deleting previous training model...")
+            os.remove("model.tflearn.data-00000-of-00001")
+            os.remove("model.tflearn.index")
+            os.remove("model.tflearn.meta")
+            time.sleep(2)
+            print("SUCCESS: Previous model removed!")
+            time.sleep(1)
+            clearConsole()
+            print("Getting ready to train neural network data...")
+            time.sleep(1)
+            print("Please do not terminate until finished!")
+            time.sleep(3)
+            clearConsole()
+            TrainNewModel()
+            clearConsole()
+            print("Model Training Successful!")
+            time.sleep(1)
+            print()
+        if trainingmodelExists == False:
+            TrainNewModel()
+            trainingmodelExists = True
         
         
     if exit == 0:
@@ -539,7 +630,6 @@ def chat():
                                 output_file.write("\n")
                             output_file.close()
 
-                 #           output_file.close()
                             chatlogNum = chatlogNum + 1
 
                             chatlogDisplay = (textcolorGray + "file name: " + textcolorGreen + fileName)
@@ -553,7 +643,9 @@ def chat():
                         if fileExists == True:
                             chatlogNum = chatlogNum + 1
 
-                    chosen_response = random.choice(responses)
+                    if labels[results_index] == "createnewtrainingmodel":
+                        chosen_response = random.choice(responses)
+                        newTrainingModel()
 
                     # System Data in response
                     if systemValue != "":

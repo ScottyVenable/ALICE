@@ -164,6 +164,20 @@
         "It seems as though I've run into an error.",
         "It looks as though I ran into an error creating your file."
       ]
+    },
+
+    {
+      "tag": "createnewtrainingmodel",
+      "patterns": [
+        "create a new training model",
+        "create a training model",
+        "learn some more data",
+        "do a training run",
+        "process your training data",
+        "develop a new training model",
+        "develop a training model"
+      ],
+      "responses": [ "Certainly, I'll get started on that model now.", "Sure. I'll start on that new model right now.", "Developing a new training model", "Of course. Developing a new training model", "Certainly, developing a new training model." ]
     }
 
 
