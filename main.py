@@ -23,6 +23,7 @@ import re
 import math
 from os.path import exists
 import shutil
+import pwinput
 
 
 
@@ -117,6 +118,9 @@ def bag_of_words(s, words):
 
 
 def chat():
+    numberList = [1,2,3,4,5,6,7,8,9]
+    numberGen = 1
+    chatlogNum = 0
     current_mood = "neutral"
     sadness_score = 0
     anger_score = 0
@@ -124,19 +128,24 @@ def chat():
     excitement_score = 0
     boredom_score = 0
     chatlog = []
-    chatlogNum = 1
+
+    while numberGen < 5:
+        chatlogNum = chatlogNum + random.choice(numberList)
+        numberGen = numberGen + 1
 
 
-    textcolorRed = '\033[1;37;40m'
+    textcolorRed = '\033[1;31;40m'
     textcolorALICE = '\033[1;36;40m'
     textcolorUsername = '\033[1;33;40m'
     textcolorWhite = '\033[1;37;40m'
     textcolorGray = '\033[1;30;40m'
     textcolorGreen = '\033[1;32;40m'
+    consoleSize = 'mode 50, 30'
+    os.system(consoleSize)
 
     programVersion = 0.1
     programVersionStr = str(programVersion)
-    programnameBanner = textcolorALICE + "-------A.L.I.C.E (v" + programVersionStr + ")-------" + textcolorWhite
+    programnameBanner = textcolorALICE + "-----------------A.L.I.C.E (v" + programVersionStr + ")-----------------" + textcolorWhite
 
     def TrainNewModel():
         tf.compat.v1.reset_default_graph()
@@ -180,11 +189,9 @@ def chat():
 
     print("Welcome to A.L.I.C.E")
     print("--------------------")
-    print("1. Login")
-    print("2. Guest Login")
-    print("3. Debug Mode")
-    print("4. Train A.L.I.C.E")
-    print("5. Exit")
+    print(textcolorUsername + "1. Login" + textcolorWhite)
+    print(textcolorGreen + "2. Debug Mode" + textcolorWhite)
+    print(textcolorALICE + "3. Train A.L.I.C.E" + textcolorWhite)
     print("--------------------")
     inp = input("> ")
 
@@ -194,8 +201,6 @@ def chat():
         menuChoice = 2
     if inp.lower() == "3":
         menuChoice = 3
-    if inp.lower() == "4":
-        menuChoice = 4
 
 
     # Login
@@ -210,17 +215,19 @@ def chat():
             username_id = 0
             logon_successful = 0
 
-            print("----LOGIN----")
+            print("-----------LOGIN-----------")
+            print()
             inp = input("Username: " + textcolorGray)
     
-            if inp.lower() == "scotty":
+            if inp == "scotty":
                 username_id = 1
-    
-            if inp.lower() == "liam":
+            if inp == "guest":
+                username_id = 0
+            if inp == "liam":
                 username_id = 2
         
-            print()
-            password = input(textcolorWhite + "Password: " + textcolorGray)
+            password = pwinput.pwinput(prompt=textcolorWhite + "Password: " + textcolorGray, mask='*')
+            
             print(textcolorWhite)
     
             # Login Users
@@ -230,41 +237,46 @@ def chat():
             if username_id == 2 and password == "fortnite":
                 logon_successful = 1
                 user_name = "Liam"
+            if username_id == 0 and password == "guest":
+                logon_successful = 1
+                user_name = "Guest"
     
             clearConsole()
             loading = "Logging in"
+            loginWait = 0
             print(loading)
             engine.say("Logging in")
             engine.runAndWait()
-            time.sleep(0.5)
-            clearConsole()
-            print(loading + ".")
-            time.sleep(0.5)
-            clearConsole()
-            print(loading + "..")
-            time.sleep(0.5)
-            clearConsole()
 
-            time.sleep(2)
-
-            if logon_successful != 1:
+            while loginWait < 23:
+                loginWait = loginWait + 1
+                time.sleep(0.02)
+                clearConsole()
+                loading+=str(".")
+                print(loading)
                 
-                print(textcolorRed + "Login Failed" + textcolorWhite)
-                engine.say("login failed")
+                
+
+
+            if logon_successful != 1:   
+                exit = 0
+                loading += textcolorRed + "Login Failed!" + textcolorWhite
+                clearConsole()
+                print(loading)
+                engine.say("login failed!")
                 engine.runAndWait()
-                time.sleep(3)
                 print()
-                print("Try again? (y/n)")
-                engine.say("try again?")
+                print("Please try again.")
+                engine.say("Please try again.")
                 engine.runAndWait()
-                tryagain = input("> ")
-                if tryagain == "n":
-                    sys.exit()
+                time.sleep(1)
+                clearConsole()
             
             else:
                 exit = 0
-                print()
-                print(textcolorGreen + "Login Successful!" + textcolorWhite)
+                loading += textcolorGreen + "Login Successful!" + textcolorWhite
+                clearConsole()
+                print(loading)
                 engine.say("login successful!")
                 engine.runAndWait()
                 print()
@@ -276,20 +288,8 @@ def chat():
                 print(programnameBanner)
                 break
 
-    # Guest
-    if menuChoice == 2:
-        debugMode = 0
-        model.load("model.tflearn")
-        exit = 0
-        clearConsole()
-        print("Welcome, Guest!")
-        print("------------------")
-        print("")
-        username_id = 999
-        user_name = "Guest"           
-
     # Debug
-    if menuChoice == 3:
+    if menuChoice == 2:
         model.load("model.tflearn")
         exit = 0
         debugMode = 1
@@ -301,7 +301,7 @@ def chat():
         user_name = "Debug"  
 
     # Train
-    if menuChoice == 4:
+    if menuChoice == 3:
         exit = 1
         clearConsole()
         print("Deleting previous training model...")
@@ -349,8 +349,9 @@ def chat():
                 inp = input(textcolorUsername + user_name + ": " + textcolorWhite)
          
                 # ADD TO TEXT LOG
-         #       chatlog.append(user_name + ": " + inp + "/n") 
-
+                current_time = datetime.datetime.now()
+                chatlog.append("("+current_time + ") - " + user_name + ": " + inp)
+                
                 # Terminate
                 if inp.lower() == "terminate": #shutdown ALICE
                     break
@@ -476,12 +477,17 @@ def chat():
 
                     if labels[results_index] == "createfile":
                         print()                    
-                        alicemessage = "What would you like to name the file? Please include the file extension."
+                        alicemessage = "What would you like to name the file?"
                         print(textcolorALICE + "ALICE: " + textcolorWhite + alicemessage)
                         engine.say(alicemessage)
                         engine.runAndWait()
-                        print(textcolorGray)
-                        fileName = input("File Name: ")
+                        print()
+                        alicemessage = "Please include the file extension."
+                        print(textcolorALICE + "ALICE: " + textcolorWhite + alicemessage)
+                        engine.say(alicemessage)
+                        engine.runAndWait()
+                        print()
+                        fileName = input(textcolorGray + "      file name: " + textcolorGreen)
                         if fileName == "!abort":
                             alicemessage = "File creation aborted."
                             print()
@@ -499,7 +505,8 @@ def chat():
                                 os.makedirs("files")
                             
                             if fileExists == False:
-                                print(fileFolder)
+                                print()
+                                print(textcolorGray + "       location: " + textcolorGreen + fileFolder)
                                 open(fileFolder, 'x')
                                 systemValue = fileName
                                 chosen_response = random.choice(responses)
@@ -509,29 +516,36 @@ def chat():
                                 errorMessage = True
                                 errorCode = 1
 
-                    if labels[results_index] == "createchatlog":               
+                    if labels[results_index] == "createchatlog":    
+                        current_time = datetime.datetime.now()
+                        fileDate = current_time.strftime("%m%d%Y")
+                        fileTime = current_time.strftime("%H%M")
                         fileFolder = "chatlogs"
                         chatlogStr = str(chatlogNum)
-                        fileName = "chatlog" + chatlogStr + ".txt"
+                        fileName = "chatlog_" + chatlogStr + fileTime + fileDate + ".txt"
                         fileFolder = (os.path.join(fileFolder, fileName))
                         fileExists = os.path.exists(fileFolder)
                         if not os.path.exists("chatlogs"):
                             os.makedirs("chatlogs")
 
                         if fileExists == False:
-                            print(fileFolder)
                             open(fileFolder, 'x')
-                            systemValue = fileName
 
                             output_file = open(fileFolder, 'w')
 
-                            for chatlog in chatlog:
-                                output_file.write(chatlog)
-
+                            for chatlogitems in chatlog:
+                                output_file.write(chatlogitems)
+                                output_file.write("\n")
                             output_file.close()
+
+                 #           output_file.close()
                             chatlogNum = chatlogNum + 1
 
+                            chatlogDisplay = (textcolorGray + "file name: " + textcolorGreen + fileName)
+                            print(chatlogDisplay)
+                            print()
                             chosen_response = random.choice(responses)
+
                             errorMessage = False
                             
                         
@@ -544,9 +558,12 @@ def chat():
                     if systemValue != "":
                         if errorMessage == False:
                             print()
-                            print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response + systemValue)
+                            print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response + textcolorGray + systemValue + textcolorWhite)
                             engine.say(chosen_response + systemValue)
                             engine.runAndWait()
+                            chatlog.append("("+current_time + ") - " + "ALICE: " + chosen_response + systemValue)
+
+
                         if errorMessage == True:
                             print()
                             print(textcolorRed + " An error has occurred! (00" + fileErrorCode + ")")
@@ -555,8 +572,9 @@ def chat():
                     # System Data is not in response
                     if systemValue == "":
                         if errorMessage == False:
+                            chatlog.append("("+current_time + ") - " + "ALICE: " + chosen_response)
                             print()
-                            print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response)
+                            print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response)                
                       #     print("A.L.I.C.E: " + chosen_response)
                             engine.say(chosen_response + systemValue)
                             engine.runAndWait()
