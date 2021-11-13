@@ -222,7 +222,7 @@ def chat():
     textcolorWhite = '\033[1;37;40m'
     textcolorGray = '\033[1;30;40m'
     textcolorGreen = '\033[1;32;40m'
-    consoleSize = 'mode 50, 30'
+    consoleSize = 'mode 70, 35'
     os.system(consoleSize)
 
         
@@ -274,8 +274,54 @@ def chat():
     menuChoice = 0
     reboot = 0
     clearConsole()
+    print(textcolorALICE)
 
+    print("""
+                       `` ``          `` ``               
+                      `    `          `   ``              
+                       `````   ....   `````               
+                          ``  `-  -`  ``                  
+                     `.``  .`` .... ``.  ``.`             
+             ```    .. `-  ` `  .. `` `  -` ..    ```     
+           ``   `   `...-` ``  `--` ``  `-...`   `   ``   
+           ``   ```   `  .-..` -``- `..-.  `   ```   ``   
+             ```   `.``.  -``-  ``  -``-  . ```   ```     
+                  `  ```  `..        ..   ``` ``          
+                ..`.-```-...          ...-```-.`..        
+                ..`.-```-...          ....```-.`..        
+                  `  ```  `..        ..`  ```  `          
+             ```   `.``.  -``-  ``  -``-  .````   ```     
+           ``   ```   `  .-..` -``- `..-.  `   ```   ``   
+           ``   `   `...-` ``` `--` ``` `-...`   `   ``   
+             ```    .. `-  ` `  .. `` `  -` ..    ```     
+                     ````  .`` .... ``.  ````             
+                          ``  `-  -`  ``                  
+                       `````   ....   `````               
+                      `    `          `   ``              
+                       `` ``          `` `` """)
+    time.sleep(2)
 
+    print("""                 _            _____        _____       ______ """)
+    time.sleep(0.05)
+    print("""     /\         | |          |_   _|      / ____|     |  ____| """)
+    time.sleep(0.05)
+    print("""    /  \        | |            | |       | |          | |__    """)
+    time.sleep(0.05)
+    print("""   / /\ \       | |            | |       | |          |  __|   """)
+    time.sleep(0.05)
+    print("""  / ____ \   _  | |____   _   _| |_   _  | |____   _  | |____  """)
+    time.sleep(0.05)
+    print(""" /_/    \_\ (_) |______| (_) |_____| (_)  \_____| (_) |______| """)
+    time.sleep(1)
+    print()
+    print("""                    (C) 2021 Scotty Venable""")
+    time.sleep(1)
+    print("""                   (C) 2021 Cadential Studios""")
+                  
+                         
+    time.sleep(3)
+    print(textcolorWhite)
+    clearConsole()
     print("Welcome to A.L.I.C.E")
     print("--------------------")
     print(textcolorUsername + "1. Login" + textcolorWhite)
