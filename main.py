@@ -350,7 +350,8 @@ def chat():
          
                 # ADD TO TEXT LOG
                 current_time = datetime.datetime.now()
-                chatlog.append("("+current_time + ") - " + user_name + ": " + inp)
+                chatlogTime = current_time.strftime("%I:%M:%S %p")
+                chatlog.append("("+ chatlogTime + ") - " + user_name + ": " + inp)
                 
                 # Terminate
                 if inp.lower() == "terminate": #shutdown ALICE
@@ -561,7 +562,9 @@ def chat():
                             print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response + textcolorGray + systemValue + textcolorWhite)
                             engine.say(chosen_response + systemValue)
                             engine.runAndWait()
-                            chatlog.append("("+current_time + ") - " + "ALICE: " + chosen_response + systemValue)
+                            current_time = datetime.datetime.now()
+                            chatlogTime = current_time.strftime("%I:%M:%S %p")
+                            chatlog.append("("+chatlogTime + ") - " + "ALICE: " + chosen_response + systemValue)
 
 
                         if errorMessage == True:
@@ -572,7 +575,9 @@ def chat():
                     # System Data is not in response
                     if systemValue == "":
                         if errorMessage == False:
-                            chatlog.append("("+current_time + ") - " + "ALICE: " + chosen_response)
+                            current_time = datetime.datetime.now()
+                            chatlogTime = current_time.strftime("%I:%M:%S %p")
+                            chatlog.append("("+chatlogTime + ") - " + "ALICE: " + chosen_response)
                             print()
                             print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response)                
                       #     print("A.L.I.C.E: " + chosen_response)
@@ -592,7 +597,10 @@ def chat():
                 # Not understanding recieved message.    
                 else:
                     print()
-                    print(textcolorALICE + "ALICE: I'm sorry, I don't understand.  \n")
+                    current_time = datetime.datetime.now()
+                    chatlogTime = current_time.strftime("%I:%M:%S %p")
+                    print(textcolorALICE + "ALICE: I'm sorry, I don't understand.")
+                    chatlog.append("("+chatlogTime + ") - " + "ALICE: I'm sorry, I don't understand.")
                     engine.say("I'm sorry, I don't understand.")
                     engine.runAndWait()
 
