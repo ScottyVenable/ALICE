@@ -27,6 +27,9 @@ import shutil
 import pwinput
 import re
 import urlopen
+import vlc
+import time
+from pygame import mixer
 
 
 
@@ -275,6 +278,17 @@ def chat():
     reboot = 0
     clearConsole()
     print(textcolorALICE)
+    voicefile = "intro"
+    voicewait = False
+    def playVoice():
+        mixer.init()
+        voicepath = "voicelines/" + voicefile + ".mp3"
+        mixer.music.load(voicepath)
+        mixer.music.play()
+        if voicewait == True:
+            while mixer.music.get_busy():  # wait for music to finish playing
+                time.sleep(1)
+
 
     print("""
                        `` ``          `` ``               
@@ -299,8 +313,8 @@ def chat():
                        `````   ....   `````               
                       `    `          `   ``              
                        `` ``          `` `` """)
-    time.sleep(2)
-
+    playVoice()
+    time.sleep(1)
     print("""                 _            _____        _____       ______ """)
     time.sleep(0.05)
     print("""     /\         | |          |_   _|      / ____|     |  ____| """)
@@ -314,27 +328,21 @@ def chat():
     print(""" /_/    \_\ (_) |______| (_) |_____| (_)  \_____| (_) |______| """)
     time.sleep(1)
     print()
-    print("""                    (C) 2021 Scotty Venable""")
-    time.sleep(1)
-    print("""                   (C) 2021 Cadential Studios""")
-                  
-                         
-    time.sleep(3)
-    print(textcolorWhite)
-    clearConsole()
-    print("Welcome to A.L.I.C.E")
-    print("--------------------")
-    print(textcolorUsername + "1. Login" + textcolorWhite)
-    print(textcolorGreen + "2. Debug Mode" + textcolorWhite)
-    print(textcolorALICE + "3. Train A.L.I.C.E" + textcolorWhite)
-    print("--------------------")
+    print("""                    (C) 2021 Cadential Studios""")
+    time.sleep(2.5)
+    print()
+    print("""              [ LOGIN ]     [ DEBUG ]     [ TRAIN ]       (v0.0.1) """)
+    print()
+    voicewait = True
+    voicefile = "desiredintent"
+    playVoice()
     inp = input("> ")
 
-    if inp.lower() == "1":
+    if inp.lower() == "login":
         menuChoice = 1
-    if inp.lower() == "2":
+    if inp.lower() == "debug":
         menuChoice = 2
-    if inp.lower() == "3":
+    if inp.lower() == "train":
         menuChoice = 3
 
 
