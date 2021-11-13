@@ -1,5 +1,0 @@
-(11:03:25 PM) - Scotty: Hello
-(11:03:25 PM) - ALICE: Hello
-(11:03:28 PM) - Scotty: How are you?
-(11:03:29 PM) - ALICE: I'm neutral
-(11:03:40 PM) - Scotty: create a new chatlog

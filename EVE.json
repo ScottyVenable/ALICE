@@ -178,6 +178,12 @@
         "develop a training model"
       ],
       "responses": [ "Certainly, I'll get started on that model now.", "Sure. I'll start on that new model right now.", "Developing a new training model", "Of course. Developing a new training model", "Certainly, developing a new training model." ]
+    },
+
+    {
+      "tag": "admininquiry",
+      "patterns": [ "am I an admin", "give me admin status", "what is my admin status", "am I an administrator", "do I have admin permissions", "what do I have for admin permissions" ],
+      "responses": ["Your current permissons are set to: ", "Your permissions are set to: ", "Permissions are set to: ", "I have your permissions set to: ", "It's showing your permissions are set to: '"]
     }
 
 

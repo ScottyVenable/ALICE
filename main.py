@@ -25,6 +25,10 @@ import math
 from os.path import exists
 import shutil
 import pwinput
+import re
+import urlopen
+
+
 
 
 
@@ -37,11 +41,6 @@ def clearConsole():
     if os.name in ('nt', 'dos'):
         command = 'cls'
     os.system(command)
-
-
-
-
-
 
 current_mood = "neutral"
 mood_tags = []
@@ -197,7 +196,10 @@ def newTrainingModel():
     engine.runAndWait()
     time.sleep(1)
 
+
+
 def chat():
+    from alicecommands import baseCommands
     numberList = [1,2,3,4,5,6,7,8,9]
     numberGen = 1
     chatlogNum = 0
@@ -261,11 +263,12 @@ def chat():
 
     def DisplayandSpeak():
         print()
-        print("ALICE: " + alicemessage)
+        print(textcolorALICE + "ALICE: " + textcolorWhite + alicemessage)
         print()
         engine.say(alicemessage)
         engine.runAndWait()
-        inp = input(user_name + ": ")
+        inp = input(textcolorUsername + user_name + ": ")
+
 
     #Main Menu
     menuChoice = 0
@@ -320,12 +323,15 @@ def chat():
             if username_id == 1 and password == "scotty2hotty":
                 logon_successful = 1
                 user_name = "Scotty"
+                admin = 1
             if username_id == 2 and password == "fortnite":
                 logon_successful = 1
                 user_name = "Liam"
+                admin = 0
             if username_id == 0 and password == "guest":
                 logon_successful = 1
                 user_name = "Guest"
+                admin = 0
     
             clearConsole()
             loading = "Logging in"
@@ -418,6 +424,7 @@ def chat():
     if exit == 0:
         if reboot == 0:
             while True:
+                
                 textcolorRed = '\033[1;37;40m'
                 textcolorALICE = '\033[1;36;40m'
                 textcolorUsername = '\033[1;33;40m'
@@ -437,46 +444,55 @@ def chat():
                 mathMultiply = ["*", "times"]
                 mathDivide = ["/", "divided by"]
                 print()
-                inp = input(textcolorUsername + user_name + ": " + textcolorWhite)
+                userChat = input(textcolorUsername + user_name + ": " + textcolorWhite)
+                userChatCommand = str(userChat)
          
                 # ADD TO TEXT LOG
                 current_time = datetime.datetime.now()
                 chatlogTime = current_time.strftime("%I:%M:%S %p")
-                chatlog.append("("+ chatlogTime + ") - " + user_name + ": " + inp)
+                chatlog.append("("+ chatlogTime + ") - " + user_name + ": " + userChat)
                 
+                if userChat.lower() == "kiki":
+                    baseCommands.testCommand()
+
                 # Terminate
-                if inp.lower() == "terminate": #shutdown ALICE
+                if userChat.lower() == "terminate": #shutdown ALICE
                     break
             
                 # No response
-                if inp.lower() == "":
+                if userChat.lower() == "":
                     print("ALICE: No response given.")
            
                 # Test message
-                if inp.lower() == "test message":
+                if userChat.lower() == "test message":
                     alicemessage = "Okay. Let's see if this new function is working."
                     DisplayandSpeak();
 
                 #display ALICE's current stored message.
-                if inp.lower() == "alicemessage":
+                if userChat.lower() == "alicemessage":
                     print(alicemessage)
 
                 #BLACKBEAR protocol (sleep/hibernate)
-                if inp.lower() == "execute blackbear protocol":
-                    alicemessage = "Enter password to execute the blackbear protocol."
-                    DisplayandSpeak()
-                    print()
+                if userChat.lower() == "execute blackbear protocol":
                 
-                    if username_id == 1 and inp.lower() == "password":
-                        alicemessage = "blackbear protocol requested. executing in 3 seconds..."
+                    if admin == 1:
+                        alicemessage = "Enter password to execute the blackbear protocol."
                         DisplayandSpeak()
-                        time.sleep(3)
-                        os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
-                        clearConsole()
-                        print("ALICE: Welcome back!")
+                        print()
+                        if userChat.lower() == "password":
+                            alicemessage = "blackbear protocol requested. executing in 3 seconds..."
+                            DisplayandSpeak()
+                            time.sleep(3)
+                            os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
+                            clearConsole()
+                            print("ALICE: Welcome back!")
+                    if admin == 0:
+                        alicemessage = "You do not have the proper permissions"
+                        DisplayandSpeak()
+                        time.sleep(1)
 
                 #Start a prediction
-                results = model.predict([bag_of_words(inp, words)])[0]
+                results = model.predict([bag_of_words(userChat, words)])[0]
                 results_index = numpy.argmax(results)
                 tag = labels[results_index]
 
@@ -516,6 +532,7 @@ def chat():
                     if labels[results_index] == "time":
                         chosen_response = random.choice(responses)
                         systemValue = give_time
+                    
                 
                     # Display Emotional Data
                     if labels[results_index] == "displayemotions":
@@ -562,7 +579,7 @@ def chat():
                         systemValue = current_mood
 
                     if labels[results_index] == "math":
-                        mathString = inp
+                        mathString = userChat
                         map(int, re.findall(r'\d+', mathString))
                         [mathString]
                         print(mathString)
@@ -637,8 +654,7 @@ def chat():
                             print()
                             chosen_response = random.choice(responses)
 
-                            errorMessage = False
-                            
+                            errorMessage = False                           
                         
                         if fileExists == True:
                             chatlogNum = chatlogNum + 1
@@ -646,6 +662,17 @@ def chat():
                     if labels[results_index] == "createnewtrainingmodel":
                         chosen_response = random.choice(responses)
                         newTrainingModel()
+
+                    if labels[results_index] == "admininquiry":
+                        chosen_response = random.choice(responses)
+                        if admin == 0:
+                            systemValue = "Standard User"
+                        if admin == 1:
+                            systemValue = "Administrator"
+                        else:
+                            systemValue = "Not Provided"
+
+                    chosen_response = random.choice(responses)
 
                     # System Data in response
                     if systemValue != "":
