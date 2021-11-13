@@ -664,13 +664,12 @@ def chat():
                         newTrainingModel()
 
                     if labels[results_index] == "admininquiry":
-                        chosen_response = random.choice(responses)
                         if admin == 0:
-                            systemValue = "Standard User"
+                            systemValue = "Standard"
                         if admin == 1:
                             systemValue = "Administrator"
-                        else:
-                            systemValue = "Not Provided"
+
+                        chosen_response = random.choice(responses)
 
                     chosen_response = random.choice(responses)
 

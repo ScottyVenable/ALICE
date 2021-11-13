@@ -183,7 +183,7 @@
     {
       "tag": "admininquiry",
       "patterns": [ "am I an admin", "give me admin status", "what is my admin status", "am I an administrator", "do I have admin permissions", "what do I have for admin permissions" ],
-      "responses": ["Your current permissons are set to: ", "Your permissions are set to: ", "Permissions are set to: ", "I have your permissions set to: ", "It's showing your permissions are set to: '"]
+      "responses": ["Your current permissions are set to: ", "Your permissions are set to: ", "Permissions are set to: ", "I have your permissions set to: ", "It's showing your permissions are set to: '"]
     }
 
 
