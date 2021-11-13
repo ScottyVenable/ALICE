@@ -262,7 +262,6 @@ def chat():
                 time.sleep(1)
                 clearConsole()
                 print(programnameBanner)
-                break
 
 
 
@@ -336,7 +335,7 @@ def chat():
                 inp = input(textcolorUsername + user_name + ": " + textcolorWhite)
          
                 # ADD TO TEXT LOG
-                chatlog.append(user_name + ": " + inp + "/n") 
+         #       chatlog.append(user_name + ": " + inp + "/n") 
 
                 # Terminate
                 if inp.lower() == "terminate": #shutdown ALICE
@@ -369,14 +368,13 @@ def chat():
                         clearConsole()
                         print("ALICE: Welcome back!")
 
-                    
-
+                #Start a prediction
                 results = model.predict([bag_of_words(inp, words)])[0]
                 results_index = numpy.argmax(results)
                 tag = labels[results_index]
 
-                if results[results_index] > 0.7: # if probability is 70% or higher
-                
+                # if probability is 70% or higher
+                if results[results_index] > 0.7: 
 
                     # Create Variables
                     current_time = datetime.datetime.now()
@@ -385,12 +383,7 @@ def chat():
                     give_time = current_time.strftime("%I:%M %p")
                     give_date = current_time.strftime("%m-%d-%Y")
                     
-
-                    
-
-                    
-                    
-
+                    # Get responses from intents file
                     for tg in data["intents"]:
                         if tg["tag"] == tag:
                             responses = tg['responses']
@@ -402,16 +395,17 @@ def chat():
                         print(responses)
 
         
-                    # Display the Date
+                    # Display the date
                     if labels[results_index] == "date":   
                         chosen_response = random.choice(responses)
                         systemValue = give_date
 
+                    # Display current mood
                     if labels[results_index] == "howareyou":
                         chosen_response = random.choice(responses)
                         systemValue = current_mood
 
-                    # Display the Time
+                    # Display the time
                     if labels[results_index] == "time":
                         chosen_response = random.choice(responses)
                         systemValue = give_time
@@ -436,16 +430,13 @@ def chat():
                         clearConsole()
                         print(programnameBanner)
                         chosen_response = random.choice(responses)
-
-                
-                  
-                    chosen_response = random.choice(responses)
                     
                     if labels[results_index] == "praise":
                         happiness_score = happiness_score + 1
                         chosen_response = random.choice(responses)
                      
                         # Moods/Emotions
+
                     if labels[results_index] == "howareyou":
 
                         if sadness_score > 5 and 'sad' in mood_tags:
@@ -504,8 +495,7 @@ def chat():
                                 errorMessage = True
                                 errorCode = 1
 
-                    while True:
-                      if labels[results_index] == "createchatlog":               
+                    if labels[results_index] == "createchatlog":               
                         fileFolder = "chatlogs"
                         chatlogStr = str(chatlogNum)
                         fileName = "chatlog" + chatlogStr + ".txt"
@@ -534,6 +524,7 @@ def chat():
                         if fileExists == True:
                             chatlogNum = chatlogNum + 1
 
+                    chosen_response = random.choice(responses)
 
                     # System Data in response
                     if systemValue != "":
