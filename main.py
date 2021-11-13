@@ -234,9 +234,9 @@ def chat():
 
 
 
-    programVersion = 0.1
+    programVersion = 0.2
     programVersionStr = str(programVersion)
-    programnameBanner = textcolorALICE + "-----------------A.L.I.C.E (v" + programVersionStr + ")-----------------" + textcolorWhite
+    programnameBanner = textcolorALICE + "-----------------A.L.I.C.E (v0." + programVersionStr + ")-----------------" + textcolorWhite
 
     def TrainNewModel():
         tf.compat.v1.reset_default_graph()
@@ -331,12 +331,12 @@ def chat():
     print("""                    (C) 2021 Cadential Studios""")
     time.sleep(2.5)
     print()
-    print("""              [ LOGIN ]     [ DEBUG ]     [ TRAIN ]       (v0.0.1) """)
+    print("""              [ LOGIN ]     [ DEBUG ]     [ TRAIN ]       """ + textcolorGray + "(v0." + programVersionStr + ")" + textcolorALICE)
     print()
     voicewait = True
     voicefile = "desiredintent"
     playVoice()
-    inp = input("> ")
+    inp = input(textcolorGray + """                            > """ + textcolorWhite)
 
     if inp.lower() == "login":
         menuChoice = 1
