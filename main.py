@@ -198,19 +198,20 @@ def chat():
         menuChoice = 4
 
 
-    # Main Menu Choices
+    # Login
     if menuChoice == 1:
         while True:
+
+            # Setup
             debugMode = 0
-
             model.load("model.tflearn") #comment out to retrain model!!!!!!  
-
             exit = 0
             clearConsole()
             username_id = 0
             logon_successful = 0
-    
-            inp = input("Username: ")
+
+            print("----LOGIN----")
+            inp = input("Username: " + textcolorGray)
     
             if inp.lower() == "scotty":
                 username_id = 1
@@ -218,22 +219,32 @@ def chat():
             if inp.lower() == "liam":
                 username_id = 2
         
-            inp = input("Password: ")
+            print()
+            password = input(textcolorWhite + "Password: " + textcolorGray)
+            print(textcolorWhite)
     
-            # Login Scotty
-            if username_id == 1 and inp.lower() == "scotty2hotty":
+            # Login Users
+            if username_id == 1 and password == "scotty2hotty":
                 logon_successful = 1
                 user_name = "Scotty"
-        
-            #Login Liam
-            if username_id == 2 and inp.lower() == "fortnite":
+            if username_id == 2 and password == "fortnite":
                 logon_successful = 1
                 user_name = "Liam"
     
-            os.system('cls')
-            print("Logging in...")
-            engine.say("logging in")
+            clearConsole()
+            loading = "Logging in"
+            print(loading)
+            engine.say("Logging in")
             engine.runAndWait()
+            time.sleep(0.5)
+            clearConsole()
+            print(loading + ".")
+            time.sleep(0.5)
+            clearConsole()
+            print(loading + "..")
+            time.sleep(0.5)
+            clearConsole()
+
             time.sleep(2)
 
             if logon_successful != 1:
@@ -251,6 +262,7 @@ def chat():
                     sys.exit()
             
             else:
+                exit = 0
                 print()
                 print(textcolorGreen + "Login Successful!" + textcolorWhite)
                 engine.say("login successful!")
@@ -262,9 +274,9 @@ def chat():
                 time.sleep(1)
                 clearConsole()
                 print(programnameBanner)
+                break
 
-
-
+    # Guest
     if menuChoice == 2:
         debugMode = 0
         model.load("model.tflearn")
@@ -276,6 +288,7 @@ def chat():
         username_id = 999
         user_name = "Guest"           
 
+    # Debug
     if menuChoice == 3:
         model.load("model.tflearn")
         exit = 0
@@ -287,6 +300,7 @@ def chat():
         username_id = 6526
         user_name = "Debug"  
 
+    # Train
     if menuChoice == 4:
         exit = 1
         clearConsole()
