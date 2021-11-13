@@ -146,6 +146,17 @@
     },
 
     {
+      "tag": "createchatlog",
+      "patterns": [ "create a new chatlog", "make a new chat log", "create chat log", "make a new chat log", "produce a new chat log", "produce a new chatlog", "give me a new chat log" ],
+      "responses": [
+        "Certainly. I've generated a new chatlog named: ",
+        "Of course. A chatlog has been created and is named: ",
+        "Chatlog has been created: ",
+        "You got it. I've generated a new chatlog named: "
+      ]
+    },
+
+    {
       "tag": "errorcreatingfile",
       "patterns": [],
       "responses": [

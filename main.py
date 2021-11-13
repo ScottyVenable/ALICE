@@ -123,6 +123,20 @@ def chat():
     happiness_score = 0
     excitement_score = 0
     boredom_score = 0
+    chatlog = []
+    chatlogNum = 1
+
+
+    textcolorRed = '\033[1;37;40m'
+    textcolorALICE = '\033[1;36;40m'
+    textcolorUsername = '\033[1;33;40m'
+    textcolorWhite = '\033[1;37;40m'
+    textcolorGray = '\033[1;30;40m'
+    textcolorGreen = '\033[1;32;40m'
+
+    programVersion = 0.1
+    programVersionStr = str(programVersion)
+    programnameBanner = textcolorALICE + "-------A.L.I.C.E (v" + programVersionStr + ")-------" + textcolorWhite
 
     def TrainNewModel():
         tf.compat.v1.reset_default_graph()
@@ -186,45 +200,71 @@ def chat():
 
     # Main Menu Choices
     if menuChoice == 1:
-        debugMode = 0
+        while True:
+            debugMode = 0
 
-        model.load("model.tflearn") #comment out to retrain model!!!!!!  
+            model.load("model.tflearn") #comment out to retrain model!!!!!!  
 
-        exit = 0
-        clearConsole()
-        username_id = 0
-        logon_successful = 0
+            exit = 0
+            clearConsole()
+            username_id = 0
+            logon_successful = 0
     
-        inp = input("Username: ")
+            inp = input("Username: ")
     
-        if inp.lower() == "scotty":
-            username_id = 1
+            if inp.lower() == "scotty":
+                username_id = 1
     
-        if inp.lower() == "liam":
-            username_id = 2
+            if inp.lower() == "liam":
+                username_id = 2
         
-        inp = input("Password: ")
+            inp = input("Password: ")
     
-        # Login Scotty
-        if username_id == 1 and inp.lower() == "scotty2hotty":
-            logon_successful = 1
-            user_name = "Scotty"
+            # Login Scotty
+            if username_id == 1 and inp.lower() == "scotty2hotty":
+                logon_successful = 1
+                user_name = "Scotty"
         
-        #Login Liam
-        if username_id == 2 and inp.lower() == "fortnite":
-            logon_successful = 1
-            user_name = "Liam"
+            #Login Liam
+            if username_id == 2 and inp.lower() == "fortnite":
+                logon_successful = 1
+                user_name = "Liam"
     
-        if logon_successful != 1:
             os.system('cls')
-            print("LOGIN FAILED")
-            inp = input("> ")
-        else:
-            os.system('cls')
-            print("Login Successful!")
-            print("Welcome, "+user_name+"!")
-            print("------------------")
-            print("")
+            print("Logging in...")
+            engine.say("logging in")
+            engine.runAndWait()
+            time.sleep(2)
+
+            if logon_successful != 1:
+                
+                print(textcolorRed + "Login Failed" + textcolorWhite)
+                engine.say("login failed")
+                engine.runAndWait()
+                time.sleep(3)
+                print()
+                print("Try again? (y/n)")
+                engine.say("try again?")
+                engine.runAndWait()
+                tryagain = input("> ")
+                if tryagain == "n":
+                    sys.exit()
+            
+            else:
+                print()
+                print(textcolorGreen + "Login Successful!" + textcolorWhite)
+                engine.say("login successful!")
+                engine.runAndWait()
+                print()
+                print("Welcome, " + textcolorUsername + user_name + textcolorWhite + "!")
+                engine.say("welcome " + user_name)
+                engine.runAndWait()
+                time.sleep(1)
+                clearConsole()
+                print(programnameBanner)
+                break
+
+
 
     if menuChoice == 2:
         debugMode = 0
@@ -274,7 +314,13 @@ def chat():
     if exit == 0:
         if reboot == 0:
             while True:
-                errorCodesList = ["Duplicate file already exists.", "No input given."]
+                textcolorRed = '\033[1;37;40m'
+                textcolorALICE = '\033[1;36;40m'
+                textcolorUsername = '\033[1;33;40m'
+                textcolorWhite = '\033[1;37;40m'
+                textcolorGray = '\033[1;30;40m'
+
+                errorCodesList = ["first_error", "Duplicate file already exists.", "File creation aborted."]
                 alicemessage = "not updated yet."
                 errorMessage = False
 
@@ -286,9 +332,11 @@ def chat():
                 mathSubtraction = ["-", "minus"]
                 mathMultiply = ["*", "times"]
                 mathDivide = ["/", "divided by"]
-               
-                print("\033[1;37;40m")
-                inp = input(user_name + ": ")
+                print()
+                inp = input(textcolorUsername + user_name + ": " + textcolorWhite)
+         
+                # ADD TO TEXT LOG
+                chatlog.append(user_name + ": " + inp + "/n") 
 
                 # Terminate
                 if inp.lower() == "terminate": #shutdown ALICE
@@ -386,6 +434,7 @@ def chat():
                     # Clear the Screen
                     if labels[results_index] == "clearscreen":
                         clearConsole()
+                        print(programnameBanner)
                         chosen_response = random.choice(responses)
 
                 
@@ -421,48 +470,88 @@ def chat():
                         print(mathString)
 
                     if labels[results_index] == "createfile":
-                        print()
+                        print()                    
                         alicemessage = "What would you like to name the file? Please include the file extension."
-                        print("\033[1;36;40mA.L.I.C.E: " + alicemessage)
-                        print("\033[1;30;40m")
+                        print(textcolorALICE + "ALICE: " + textcolorWhite + alicemessage)
+                        engine.say(alicemessage)
+                        engine.runAndWait()
+                        print(textcolorGray)
                         fileName = input("File Name: ")
-                        fileFolder = "files"
+                        if fileName == "!abort":
+                            alicemessage = "File creation aborted."
+                            print()
+                            print(textcolorALICE + "ALICE: " + textcolorWhite + alicemessage)
+                            engine.say("file creation aborted.")
+                            errorMessage = True
+                            errorCode = 2
+                            engine.runAndWait()
+
+                        if fileName != "!abort":
+                            fileFolder = "files"
+                            fileFolder = (os.path.join(fileFolder, fileName))
+                            fileExists = os.path.exists(fileFolder)
+                            if not os.path.exists("files"):
+                                os.makedirs("files")
+                            
+                            if fileExists == False:
+                                print(fileFolder)
+                                open(fileFolder, 'x')
+                                systemValue = fileName
+                                chosen_response = random.choice(responses)
+                                errorMessage = False
+                        
+                            if fileExists == True:
+                                errorMessage = True
+                                errorCode = 1
+
+                    while True:
+                      if labels[results_index] == "createchatlog":               
+                        fileFolder = "chatlogs"
+                        chatlogStr = str(chatlogNum)
+                        fileName = "chatlog" + chatlogStr + ".txt"
                         fileFolder = (os.path.join(fileFolder, fileName))
                         fileExists = os.path.exists(fileFolder)
-                        if not os.path.exists("files"):
-                            os.makedirs("files")
-                            
+                        if not os.path.exists("chatlogs"):
+                            os.makedirs("chatlogs")
 
                         if fileExists == False:
                             print(fileFolder)
                             open(fileFolder, 'x')
                             systemValue = fileName
+
+                            output_file = open(fileFolder, 'w')
+
+                            for chatlog in chatlog:
+                                output_file.write(chatlog)
+
+                            output_file.close()
+                            chatlogNum = chatlogNum + 1
+
                             chosen_response = random.choice(responses)
                             errorMessage = False
+                            
                         
                         if fileExists == True:
-                            errorMessage = True
-                            errorCode = 1
+                            chatlogNum = chatlogNum + 1
 
-                        
 
                     # System Data in response
                     if systemValue != "":
                         if errorMessage == False:
                             print()
-                            print("\033[1;36;40mALICE: " + chosen_response + systemValue)
+                            print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response + systemValue)
                             engine.say(chosen_response + systemValue)
                             engine.runAndWait()
                         if errorMessage == True:
                             print()
-                            print("\033[1;31;40m An error has occurred! (00" + fileErrorCode + ")")
+                            print(textcolorRed + " An error has occurred! (00" + fileErrorCode + ")")
                             print(errorCodesList[errorCode])
 
                     # System Data is not in response
                     if systemValue == "":
                         if errorMessage == False:
                             print()
-                            print("\033[1;36;40mALICE: " + chosen_response)
+                            print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response)
                       #     print("A.L.I.C.E: " + chosen_response)
                             engine.say(chosen_response + systemValue)
                             engine.runAndWait()
@@ -470,16 +559,18 @@ def chat():
                             print()
                             errorCodeasStr = str(errorCode)
 
-                            print("\033[1;31;40mAn error has occurred!")
+                            print(textcolorRed + "An error has occurred!")
                             print("error code: (" + errorCodeasStr + ")")
                             print('"' + errorCodesList[errorCode] + '"')
+
+                            engine.say("An error has occurred! " + errorCodesList[errorCode])
+                            engine.runAndWait()
 
                 # Not understanding recieved message.    
                 else:
                     print()
-                    print("\033[1;36;40m A.L.I.C.E: I'm sorry, I don't understand.  \n")
+                    print(textcolorALICE + "ALICE: I'm sorry, I don't understand.  \n")
                     engine.say("I'm sorry, I don't understand.")
-                    print("")
                     engine.runAndWait()
 
 
