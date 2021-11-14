@@ -47,8 +47,9 @@ def clearConsole():
 def removeTrainingModel():
     clearConsole()
     print("What is the name of the model you would like to delete?")
+    print(textcolorGray + "(type 'model' if you didn't rename the previous model.)" + textcolorWhite)
     print()
-    modelName = input("> ")
+    modelName = input("> " + textcolorGray)
 
     
     os.remove(modelName + ".tflearn.data-00000-of-00001")
@@ -103,7 +104,7 @@ def removeTrainingModel():
     time.sleep(3)
     clearConsole()
 
-def newTrainingModel():
+def updateTrainingModel():
     voiceMute = False
     voicewait = False
     def Speak(voicefile):
@@ -122,15 +123,25 @@ def newTrainingModel():
     textcolorWhite = '\033[1;37;40m'
     textcolorGray = '\033[1;30;40m'
     textcolorGreen = '\033[1;32;40m'
-
-    print(textcolorWhite + "What would you like to name the new training model?")
-    print()
-    trainingmodelname = input("> " + textcolorGray)
-    time.sleep(1)
-    Speak("success")
-    print(textcolorGreen + "Success!")
-    time.sleep(2)
-
+    modelRename = ""
+    while modelRename == "":
+        print(textcolorWhite + "Would you like to rename the model? (y/n)")
+        print()
+        modelRename = input("> " + textcolorGray)
+        if modelRename.lower() == "y" or modelRename.lower() == "yes":
+            clearConsole()
+            print(textcolorWhite + "What would you like to name the new model?")
+            newModelName = input("> " + textcolorGray)
+            time.sleep(2)
+            Speak("success")
+            print(textcolorGreen + "Success!")
+            print()
+            time.sleep(0.5)
+            print(textcolorWhite + "Model has been named: " + textcolorUsername)
+            time.sleep(1)
+        if modelRename.lower() == "n" or modelRename.lower() == "no":
+            newModelName = "model"
+    
     Speak("prepare_to_train")
     print("Getting ready to train neural network data...")
     time.sleep(1)
@@ -149,7 +160,7 @@ def newTrainingModel():
 
     model = tflearn.DNN(net)
     model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
-    model.save(trainingmodelname + ".tflearn")
+    model.save(newModelName + ".tflearn")
 
     clearConsole()
     print(textcolorGreen + "Model Training Successful!" + textcolorGreen)
@@ -377,14 +388,12 @@ def chat():
             if voicewait == True:
                 while mixer.music.get_busy():  # wait for music to finish playing
                     time.sleep(1)
-    def muteVoice():
-        print("Would you like my voice to be muted? (y/n)")
-        voice = input("> ")
-        if voice == "y":
+    def muteVoicePrompt():
+        muteOption = input("Mute (y/n): ")
+        if muteOption == "y":
             voiceMute = True
-        if voice == "n":
+        if muteOption == "n":
             voiceMute = False
-
         clearConsole()
 
 
@@ -396,6 +405,16 @@ def chat():
         textcolorWhite = '\033[1;37;40m'
         textcolorGray = '\033[1;30;40m'
         textcolorGreen = '\033[1;32;40m'
+        voiceMute = False
+        def muteVoicePrompt():
+            muteOption = input("Mute (y/n): ")
+            if muteOption == "y":
+                voiceMute = True
+            if muteOption == "n":
+                voiceMute = False
+            clearConsole()
+        muteVoicePrompt()
+        
         print(textcolorGray + "(v0." + programVersionStr + ")" + textcolorALICE)
         print("""
                          `` ``          `` ``               
@@ -438,22 +457,19 @@ def chat():
         print(textcolorGray + """                     (C) 2021 Cadential Studios""" + textcolorWhite)
         time.sleep(2.5)
         print()
-        print("""                [ LOGIN ]     [ DEBUG ]     [ EXIT ]                """)   
-        print("""       [ CREATE LEARNING MODEL ]     [ DELETE LEARNING MODEL ]       """)
+        print("""               """+textcolorALICE+"""[ LOGIN ]"""+textcolorGreen+"""     [ UPDATE ]"""+textcolorRed+"""     [ EXIT ]                """)   
         print()
         voicewait = True
-        Speak("desiredintent")
+        if voiceMute == False:
+            Speak("desiredintent")
     MainMenu()
     mainmenu = True
-    inp = input("""                 > """ + textcolorALICE)
+    inp = input(textcolorWhite+"""                      > """ + textcolorALICE).upper()
     print(textcolorWhite)
-    if inp.lower() == "create learning model":
+    if inp.lower() == "update":
         menuChoice = 3
         exit = 1
-    if inp.lower() == "delete learning model":
-        menuChoice = 4
-        exit = 1
-    if inp.lower() == "debug":
+    if inp.lower() == "!debug":
         menuChoice = 2
     if inp.lower() == "login":
         menuChoice = 1
@@ -638,15 +654,16 @@ def chat():
         username_id = 6526
         user_name = "Debug"  
     if menuChoice == 3:
+        clearConsole()
         def TrainingModelCreationV2():
             clearConsole()
-            print(textcolorGreen + "Creating a new learning model!")
+            print(textcolorGreen + "Preparing to update the learning model!")
             time.sleep(2)
-            newTrainingModel()
+            updateTrainingModel()
         TrainingModelCreationV2()
     if menuChoice == 4:
         clearConsole()
-        removeTrainingModel()
+        
 
         
     if exit == 0:
@@ -911,7 +928,7 @@ def chat():
 
                     if labels[results_index] == "createnewtrainingmodel":
                         chosen_response = random.choice(responses)
-                        newTrainingModel()
+                        updateTrainingModel()
 
                     if labels[results_index] == "admininquiry":
                         if admin == 0:
