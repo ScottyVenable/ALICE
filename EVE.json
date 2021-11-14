@@ -183,7 +183,13 @@
     {
       "tag": "admininquiry",
       "patterns": [ "am I an admin", "give me admin status", "what is my admin status", "am I an administrator", "do I have admin permissions", "what do I have for admin permissions" ],
-      "responses": ["Your current permissions are set to: ", "Your permissions are set to: ", "Permissions are set to: ", "I have your permissions set to: ", "It's showing your permissions are set to: '"]
+      "responses": [ "Your current permissions are set to: ", "Your permissions are set to: ", "Permissions are set to: ", "I have your permissions set to: ", "It's showing your permissions are set to: '" ]
+    },
+
+    {
+      "tag": "terminate",
+      "patterns": [ "terminate", "terminate this program", "alice shutdown", "shutdown alice", "terminate alice", "alice terminate" ],
+      "responses": [ "Please confirm that you would like to terminate.", "Please enter your password to terminate.", "To terminate, please enter your password."]
     }
 
 

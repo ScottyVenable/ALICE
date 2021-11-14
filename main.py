@@ -33,8 +33,7 @@ from pygame import mixer
 
 
 
-
-
+introVoices = ["intro_1", "intro_2", "intro_3"]
 
 with open("EVE.json") as file:
     data = json.load(file)
@@ -44,6 +43,118 @@ def clearConsole():
     if os.name in ('nt', 'dos'):
         command = 'cls'
     os.system(command)
+
+def removeTrainingModel():
+    clearConsole()
+    print("What is the name of the model you would like to delete?")
+    print()
+    modelName = input("> ")
+
+    
+    os.remove(modelName + ".tflearn.data-00000-of-00001")
+    os.remove(modelName + ".tflearn.index")
+    os.remove(modelName + ".tflearn.meta")
+    print()
+    time.sleep(2)
+
+    def loadingDeleteModel():
+
+        voiceMute = False
+        voicewait = False
+        def Speak(voicefile):
+            if voiceMute == False:
+                mixer.init()
+                voicepath = "voicelines/" + voicefile + ".mp3"
+                mixer.music.load(voicepath)
+                mixer.music.play()
+                if voicewait == True:
+                    while mixer.music.get_busy():  # wait for music to finish playing
+                        time.sleep(1)
+
+        textcolorRed = '\033[1;31;40m'
+        textcolorALICE = '\033[1;36;40m'
+        textcolorUsername = '\033[1;33;40m'
+        textcolorWhite = '\033[1;37;40m'
+        textcolorGray = '\033[1;30;40m'
+        textcolorGreen = '\033[1;32;40m'
+
+        loadingMessage = "Deleting previous training data"
+        loadingSuccess = textcolorGreen + "Training model deleted!" + textcolorWhite
+        loadingFailed = textcolorRed + "Training model deletion failed!" + textcolorWhite
+        dotCount = 20
+        clearConsole()
+        deleteWait = 0
+        print(loadingMessage)
+
+        while deleteWait < dotCount:
+            deleteWait = deleteWait + 1
+            time.sleep(0.02)
+            clearConsole()
+            loadingMessage+=str(".")
+            print(loadingMessage)
+
+        Speak("training_model_deleted")
+        loadingMessage+=str(loadingSuccess)
+        print(textcolorGreen + "Success!")
+        time.sleep(3)
+        exit = 1
+
+    loadingDeleteModel()
+    time.sleep(3)
+    clearConsole()
+
+def newTrainingModel():
+    voiceMute = False
+    voicewait = False
+    def Speak(voicefile):
+        if voiceMute == False:
+            mixer.init()
+            voicepath = "voicelines/" + voicefile + ".mp3"
+            mixer.music.load(voicepath)
+            mixer.music.play()
+            if voicewait == True:
+                while mixer.music.get_busy():  # wait for sound to finish playing
+                    time.sleep(1)
+
+    textcolorRed = '\033[1;31;40m'
+    textcolorALICE = '\033[1;36;40m'
+    textcolorUsername = '\033[1;33;40m'
+    textcolorWhite = '\033[1;37;40m'
+    textcolorGray = '\033[1;30;40m'
+    textcolorGreen = '\033[1;32;40m'
+
+    print(textcolorWhite + "What would you like to name the new training model?")
+    print()
+    trainingmodelname = input("> " + textcolorGray)
+    time.sleep(1)
+    Speak("success")
+    print(textcolorGreen + "Success!")
+    time.sleep(2)
+
+    Speak("prepare_to_train")
+    print("Getting ready to train neural network data...")
+    time.sleep(1)
+    Speak("do_not_terminate")
+    print(textcolorRed + "Please do not terminate until finished!" + textcolorWhite)
+    time.sleep(3)
+    clearConsole()
+    
+    tf.compat.v1.reset_default_graph()
+
+    net = tflearn.input_data(shape=[None, len(training[0])])
+    net = tflearn.fully_connected(net, 8)
+    net = tflearn.fully_connected(net, 8)
+    net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
+    net = tflearn.regression(net)
+
+    model = tflearn.DNN(net)
+    model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
+    model.save(trainingmodelname + ".tflearn")
+
+    clearConsole()
+    print(textcolorGreen + "Model Training Successful!" + textcolorGreen)
+    time.sleep(1)
+
 
 current_mood = "neutral"
 mood_tags = []
@@ -140,64 +251,48 @@ def bag_of_words(s, words):
     net = tflearn.regression(net)
 
     model = tflearn.DNN(net)
-
-
-def newTrainingModel():
-
+def populateColors():
     textcolorRed = '\033[1;31;40m'
     textcolorALICE = '\033[1;36;40m'
     textcolorUsername = '\033[1;33;40m'
     textcolorWhite = '\033[1;37;40m'
     textcolorGray = '\033[1;30;40m'
     textcolorGreen = '\033[1;32;40m'
-    consoleSize = 'mode 50, 30'
 
-    loading = "Deleting previous training model"
+isSuccessful = False
+dotCount = 18
 
+loadMessage = "default"
+loadActive = False
+def loadingAnimation():
+    textcolorRed = '\033[1;31;40m'
+    textcolorALICE = '\033[1;36;40m'
+    textcolorUsername = '\033[1;33;40m'
+    textcolorWhite = '\033[1;37;40m'
+    textcolorGray = '\033[1;30;40m'
+    textcolorGreen = '\033[1;32;40m'
+    loadingSuccess = textcolorGreen + "Success!" + textcolorWhite
+    loadingFailed = textcolorRed + "Failed!" + textcolorWhite
     clearConsole()
     deleteWait = 0
-    print(loading)
-    engine.say("Deleting previous training model")
-    engine.runAndWait()
+    print(loadingMessage)
 
-    while deleteWait < 18:
+    while deleteWait < dotCount:
         deleteWait = deleteWait + 1
         time.sleep(0.02)
         clearConsole()
-        loading+=str(".")
-        print(loading)
+        loadingMessage+=str(".")
+        print(loadingMessage)
+    if isSuccessful == True:
+        loadingMessage+=str(loadingSuccess)
+        time.sleep(3)
+    if isSuccessful == False:
+        loadingMessage+=str(loadingFailed)
+        time.sleep(3)
 
-    os.remove("model.tflearn.data-00000-of-00001")
-    os.remove("model.tflearn.index")
-    os.remove("model.tflearn.meta")
-    print()
-    time.sleep(2)
-    print("SUCCESS: Previous model removed!")
-    time.sleep(1)
-    clearConsole()
-    print("Getting ready to train neural network data...")
-    time.sleep(1)
-    print(textcolorRed + "Please do not terminate until finished!" + textcolorWhite)
-    time.sleep(3)
-    clearConsole()
-    
-    tf.compat.v1.reset_default_graph()
 
-    net = tflearn.input_data(shape=[None, len(training[0])])
-    net = tflearn.fully_connected(net, 8)
-    net = tflearn.fully_connected(net, 8)
-    net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
-    net = tflearn.regression(net)
 
-    model = tflearn.DNN(net)
-    model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
-    model.save("model.tflearn")
 
-    clearConsole()
-    print(textcolorGreen + "Model Training Successful!" + textcolorGreen)
-    engine.say("model training successful!")
-    engine.runAndWait()
-    time.sleep(1)
 
 
 
@@ -228,15 +323,9 @@ def chat():
     consoleSize = 'mode 70, 35'
     os.system(consoleSize)
 
-        
-
-
-
-
-
     programVersion = 0.2
     programVersionStr = str(programVersion)
-    programnameBanner = textcolorALICE + "-----------------A.L.I.C.E (v0." + programVersionStr + ")-----------------" + textcolorWhite
+    programnameBanner = textcolorALICE + "--------------------------A.L.I.C.E (v0." + programVersionStr + ")--------------------------" + textcolorWhite
 
     def TrainNewModel():
         tf.compat.v1.reset_default_graph()
@@ -260,7 +349,7 @@ def chat():
 
     model = tflearn.DNN(net)
 
-    os.system('cls')
+    clearConsole()
     voices = engine.getProperty('voices')  
     engine.setProperty('voice', voices[1].id)
 
@@ -272,100 +361,129 @@ def chat():
         engine.runAndWait()
         inp = input(textcolorUsername + user_name + ": ")
 
-
-    #Main Menu
     menuChoice = 0
     reboot = 0
     clearConsole()
     print(textcolorALICE)
-    voicefile = "intro"
+    voicefile = random.choice(introVoices)
     voicewait = False
-    def playVoice():
-        mixer.init()
-        voicepath = "voicelines/" + voicefile + ".mp3"
-        mixer.music.load(voicepath)
-        mixer.music.play()
-        if voicewait == True:
-            while mixer.music.get_busy():  # wait for music to finish playing
-                time.sleep(1)
+    voiceMute = False
+    def Speak(voicefile):
+        if voiceMute == False:
+            mixer.init()
+            voicepath = "voicelines/" + voicefile + ".mp3"
+            mixer.music.load(voicepath)
+            mixer.music.play()
+            if voicewait == True:
+                while mixer.music.get_busy():  # wait for music to finish playing
+                    time.sleep(1)
+    def muteVoice():
+        print("Would you like my voice to be muted? (y/n)")
+        voice = input("> ")
+        if voice == "y":
+            voiceMute = True
+        if voice == "n":
+            voiceMute = False
+
+        clearConsole()
 
 
-    print("""
-                       `` ``          `` ``               
-                      `    `          `   ``              
-                       `````   ....   `````               
-                          ``  `-  -`  ``                  
-                     `.``  .`` .... ``.  ``.`             
-             ```    .. `-  ` `  .. `` `  -` ..    ```     
-           ``   `   `...-` ``  `--` ``  `-...`   `   ``   
-           ``   ```   `  .-..` -``- `..-.  `   ```   ``   
-             ```   `.``.  -``-  ``  -``-  . ```   ```     
-                  `  ```  `..        ..   ``` ``          
-                ..`.-```-...          ...-```-.`..        
-                ..`.-```-...          ....```-.`..        
-                  `  ```  `..        ..`  ```  `          
-             ```   `.``.  -``-  ``  -``-  .````   ```     
-           ``   ```   `  .-..` -``- `..-.  `   ```   ``   
-           ``   `   `...-` ``` `--` ``` `-...`   `   ``   
-             ```    .. `-  ` `  .. `` `  -` ..    ```     
-                     ````  .`` .... ``.  ````             
-                          ``  `-  -`  ``                  
-                       `````   ....   `````               
-                      `    `          `   ``              
-                       `` ``          `` `` """)
-    playVoice()
-    time.sleep(1)
-    print("""                 _            _____        _____       ______ """)
-    time.sleep(0.05)
-    print("""     /\         | |          |_   _|      / ____|     |  ____| """)
-    time.sleep(0.05)
-    print("""    /  \        | |            | |       | |          | |__    """)
-    time.sleep(0.05)
-    print("""   / /\ \       | |            | |       | |          |  __|   """)
-    time.sleep(0.05)
-    print("""  / ____ \   _  | |____   _   _| |_   _  | |____   _  | |____  """)
-    time.sleep(0.05)
-    print(""" /_/    \_\ (_) |______| (_) |_____| (_)  \_____| (_) |______| """)
-    time.sleep(1)
-    print()
-    print("""                    (C) 2021 Cadential Studios""")
-    time.sleep(2.5)
-    print()
-    print("""              [ LOGIN ]     [ DEBUG ]     [ TRAIN ]       """ + textcolorGray + "(v0." + programVersionStr + ")" + textcolorALICE)
-    print()
-    voicewait = True
-    voicefile = "desiredintent"
-    playVoice()
-    inp = input(textcolorGray + """                            > """ + textcolorWhite)
-
-    if inp.lower() == "login":
-        menuChoice = 1
+    #Main Menu
+    def MainMenu():
+        textcolorRed = '\033[1;31;40m'
+        textcolorALICE = '\033[1;36;40m'
+        textcolorUsername = '\033[1;33;40m'
+        textcolorWhite = '\033[1;37;40m'
+        textcolorGray = '\033[1;30;40m'
+        textcolorGreen = '\033[1;32;40m'
+        print(textcolorGray + "(v0." + programVersionStr + ")" + textcolorALICE)
+        print("""
+                         `` ``          `` ``               
+                        `    `          `   ``              
+                         `````   ....   `````               
+                            ``  `-  -`  ``                  
+                       `.``  .`` .... ``.  ``.`             
+               ```    .. `-  ` `  .. `` `  -` ..    ```     
+             ``   `   `...-` ``  `--` ``  `-...`   `   ``   
+             ``   ```   `  .-..` -``- `..-.  `   ```   ``   
+               ```   `.``.  -``-  ``  -``-  . ```   ```     
+                    `  ```  `..        ..   ``` ``          
+                  ..`.-```-...          ...-```-.`..        
+                  ..`.-```-...          ....```-.`..        
+                    `  ```  `..        ..`  ```  `          
+               ```   `.``.  -``-  ``  -``-  .````   ```     
+             ``   ```   `  .-..` -``- `..-.  `   ```   ``   
+             ``   `   `...-` ``` `--` ``` `-...`   `   ``   
+               ```    .. `-  ` `  .. `` `  -` ..    ```     
+                       ````  .`` .... ``.  ````             
+                            ``  `-  -`  ``                  
+                         `````   ....   `````               
+                        `    `          `   ``              
+                         `` ``          `` `` """)
+        Speak("intro")
+        time.sleep(1)
+        print("""                   _            _____        _____       ______ """)
+        time.sleep(0.05)
+        print("""       /\         | |          |_   _|      / ____|     |  ____| """)
+        time.sleep(0.05)
+        print("""      /  \        | |            | |       | |          | |__    """)
+        time.sleep(0.05)
+        print("""     / /\ \       | |            | |       | |          |  __|   """)
+        time.sleep(0.05)
+        print("""    / ____ \   _  | |____   _   _| |_   _  | |____   _  | |____  """)
+        time.sleep(0.05)
+        print("""   /_/    \_\ (_) |______| (_) |_____| (_)  \_____| (_) |______| """)
+        time.sleep(1)
+        print()
+        print(textcolorGray + """                     (C) 2021 Cadential Studios""" + textcolorWhite)
+        time.sleep(2.5)
+        print()
+        print("""                [ LOGIN ]     [ DEBUG ]     [ EXIT ]                """)   
+        print("""       [ CREATE LEARNING MODEL ]     [ DELETE LEARNING MODEL ]       """)
+        print()
+        voicewait = True
+        Speak("desiredintent")
+    MainMenu()
+    mainmenu = True
+    inp = input("""                 > """ + textcolorALICE)
+    print(textcolorWhite)
+    if inp.lower() == "create learning model":
+        menuChoice = 3
+        exit = 1
+    if inp.lower() == "delete learning model":
+        menuChoice = 4
+        exit = 1
     if inp.lower() == "debug":
         menuChoice = 2
-    if inp.lower() == "train":
-        menuChoice = 3
+    if inp.lower() == "login":
+        menuChoice = 1
+    if inp.lower() == "exit":
+        exit = 1
 
 
-    # Login
+
     if menuChoice == 1:
+        
         while True:
-
-            # Setup
+            consoleSize = 'mode 43, 35'
+            os.system(consoleSize)
             debugMode = 0
-            model.load("model.tflearn") #comment out to retrain model!!!!!!  
+            model.load("model.tflearn")  
             exit = 0
             clearConsole()
             username_id = 0
             logon_successful = 0
-
-            print("-----------LOGIN-----------")
+            
+            print("-------------------LOGIN-------------------")
             print()
             inp = input("Username: " + textcolorGray)
     
             if inp == "scotty":
                 username_id = 1
+                voicefile = "welcome_scotty"
             if inp == "guest":
                 username_id = 0
+                voicefile = "welcome_guest"
             if inp == "liam":
                 username_id = 2
         
@@ -377,64 +495,138 @@ def chat():
             if username_id == 1 and password == "scotty2hotty":
                 logon_successful = 1
                 user_name = "Scotty"
+                password = "scotty2hotty"
                 admin = 1
             if username_id == 2 and password == "fortnite":
                 logon_successful = 1
                 user_name = "Liam"
+                password = "fortnite"
                 admin = 0
             if username_id == 0 and password == "guest":
                 logon_successful = 1
                 user_name = "Guest"
+                password = "guest"
                 admin = 0
     
             clearConsole()
-            loading = "Logging in"
-            loginWait = 0
-            print(loading)
-            engine.say("Logging in")
-            engine.runAndWait()
-
-            while loginWait < 23:
-                loginWait = loginWait + 1
-                time.sleep(0.02)
-                clearConsole()
-                loading+=str(".")
-                print(loading)
-                
-                
+            dotCount = 23
+                    
 
 
             if logon_successful != 1:   
                 exit = 0
-                loading += textcolorRed + "Login Failed!" + textcolorWhite
-                clearConsole()
-                print(loading)
-                engine.say("login failed!")
-                engine.runAndWait()
+                isSuccessful = False
+                loadMessage = "Logging in"
+                def loginLoadFailed():
+                    textcolorRed = '\033[1;31;40m'
+                    textcolorALICE = '\033[1;36;40m'
+                    textcolorUsername = '\033[1;33;40m'
+                    textcolorWhite = '\033[1;37;40m'
+                    textcolorGray = '\033[1;30;40m'
+                    textcolorGreen = '\033[1;32;40m'                
+                    
+                    dotCount = 16
+                    loadMessage = "Logging in"
+                    
+                    loadingSuccess = textcolorGreen + "LOGIN SUCCESSFUL!" + textcolorWhite
+                    loadingFailed = textcolorRed + "LOGIN FAILED!" + textcolorWhite
+                
+                    clearConsole()
+                    deleteWait = 0
+                    Speak("loggingin")
+                    print(loadMessage)
+
+                    while deleteWait < dotCount:
+                        deleteWait = deleteWait + 1
+                        time.sleep(0.07)
+                        clearConsole()
+                        loadMessage+=str(".")
+                        print(loadMessage)
+
+                    Speak("login_failed")
+                    isSuccessful = False
+
+                    if isSuccessful == True:
+                        loadMessage+=str(loadingSuccess)
+                        print("Success")
+                        time.sleep(3)
+                    if isSuccessful == False:
+                        loadMessage+=str(loadingFailed)
+                        clearConsole()
+                        print(loadMessage)
+                        time.sleep(3)
+
+                    else:
+                        print("Other")
+                        time.sleep(3)
+                loginLoadFailed()  
+
                 print()
+                Speak("pleasetryagain")
                 print("Please try again.")
-                engine.say("Please try again.")
-                engine.runAndWait()
                 time.sleep(1)
                 clearConsole()
             
             else:
                 exit = 0
-                loading += textcolorGreen + "Login Successful!" + textcolorWhite
-                clearConsole()
-                print(loading)
-                engine.say("login successful!")
-                engine.runAndWait()
-                print()
+                voicewait = False
+                loadMessage = "Logging in"
+
+                loadActive = True
+
+                def loginLoadSuccess():
+                    textcolorRed = '\033[1;31;40m'
+                    textcolorALICE = '\033[1;36;40m'
+                    textcolorUsername = '\033[1;33;40m'
+                    textcolorWhite = '\033[1;37;40m'
+                    textcolorGray = '\033[1;30;40m'
+                    textcolorGreen = '\033[1;32;40m'
+                
+                    Speak("loggingin")
+                    dotCount = 16
+                    loadMessage = "Logging in"
+                    loadingSuccess = textcolorGreen + "LOGIN SUCCESSFUL!" + textcolorWhite
+                    loadingFailed = textcolorRed + "LOGIN FAILED!" + textcolorWhite
+                
+                    clearConsole()
+                    deleteWait = 0
+                    print(loadMessage)
+
+                    while deleteWait < dotCount:
+                        deleteWait = deleteWait + 1
+                        time.sleep(0.07)
+                        clearConsole()
+                        loadMessage+=str(".")
+                        print(loadMessage)
+
+                    Speak("login_successful")
+                    isSuccessful = True
+
+                    if isSuccessful == True:
+                        loadMessage+=str(loadingSuccess)
+                        clearConsole()
+                        print(loadMessage)
+                        time.sleep(3)
+                    if isSuccessful == False:
+                        loadMessage+=str(loadingFailed)
+                        clearConsole()
+                        print(loadMessage)
+                        time.sleep(3)
+                
+                loginLoadSuccess() 
+                
+                Speak("welcome_" + user_name.lower())
+
                 print("Welcome, " + textcolorUsername + user_name + textcolorWhite + "!")
-                engine.say("welcome " + user_name)
-                engine.runAndWait()
-                time.sleep(1)
+                currentUserPassword = password
+
+
+                time.sleep(3)
                 clearConsole()
+                consoleSize = 'mode 70, 35'
+                os.system(consoleSize)
                 print(programnameBanner)
                 break
-
-    # Debug
     if menuChoice == 2:
         model.load("model.tflearn")
         exit = 0
@@ -445,40 +637,24 @@ def chat():
         print("")
         username_id = 6526
         user_name = "Debug"  
-
-    # Train
     if menuChoice == 3:
-        trainingmodelExists = False
-        if trainingmodelExists == True:
-            exit = 1
+        def TrainingModelCreationV2():
             clearConsole()
-            print("Deleting previous training model...")
-            os.remove("model.tflearn.data-00000-of-00001")
-            os.remove("model.tflearn.index")
-            os.remove("model.tflearn.meta")
+            print(textcolorGreen + "Creating a new learning model!")
             time.sleep(2)
-            print("SUCCESS: Previous model removed!")
-            time.sleep(1)
-            clearConsole()
-            print("Getting ready to train neural network data...")
-            time.sleep(1)
-            print("Please do not terminate until finished!")
-            time.sleep(3)
-            clearConsole()
-            TrainNewModel()
-            clearConsole()
-            print("Model Training Successful!")
-            time.sleep(1)
-            print()
-        if trainingmodelExists == False:
-            TrainNewModel()
-            trainingmodelExists = True
-        
+            newTrainingModel()
+        TrainingModelCreationV2()
+    if menuChoice == 4:
+        clearConsole()
+        removeTrainingModel()
+
         
     if exit == 0:
         if reboot == 0:
+            enterPassword = False
+            pwAction = ""
             while True:
-                
+                consoleSize = 'mode 70, 35'
                 textcolorRed = '\033[1;37;40m'
                 textcolorALICE = '\033[1;36;40m'
                 textcolorUsername = '\033[1;33;40m'
@@ -498,8 +674,27 @@ def chat():
                 mathMultiply = ["*", "times"]
                 mathDivide = ["/", "divided by"]
                 print()
-                userChat = input(textcolorUsername + user_name + ": " + textcolorWhite)
-                userChatCommand = str(userChat)
+
+                #USER CHAT
+                
+                if enterPassword == False:
+                    userChat = input(textcolorUsername + user_name + ": " + textcolorWhite)
+                    userChatCommand = str(userChat)
+                if enterPassword == True:
+                    passwordInput = pwinput.pwinput(prompt=textcolorWhite + "    Password: " + textcolorGray, mask='*')
+                    if passwordInput == currentUserPassword:
+                        passwordCorrect = True
+                        enterPassword = False
+                        if pwAction == "terminate":
+                            clearConsole()
+                            print(textcolorRed+"A.L.I.C.E is shutting down...")
+                            time.sleep(2)
+                            break
+                            
+                    if passwordInput != currentUserPassword:
+                        passwordCorrect = False
+                        enterPassword = False 
+                        print(textcolorRed + "  --PASSWORD INCORRECT--" + textcolorWhite)
          
                 # ADD TO TEXT LOG
                 current_time = datetime.datetime.now()
@@ -510,8 +705,6 @@ def chat():
                     baseCommands.testCommand()
 
                 # Terminate
-                if userChat.lower() == "terminate": #shutdown ALICE
-                    break
             
                 # No response
                 if userChat.lower() == "":
@@ -571,7 +764,10 @@ def chat():
                         print("Label: " + '"' + labels[results_index] + '"')
                         print(responses)
 
-        
+                    if labels[results_index] == "terminate":
+                        chosen_response = random.choice(responses)
+                        pwAction = "terminate"
+                        enterPassword = True
                     # Display the date
                     if labels[results_index] == "date":   
                         chosen_response = random.choice(responses)
@@ -737,7 +933,6 @@ def chat():
                             current_time = datetime.datetime.now()
                             chatlogTime = current_time.strftime("%I:%M:%S %p")
                             chatlog.append("("+chatlogTime + ") - " + "ALICE: " + chosen_response + systemValue)
-
 
                         if errorMessage == True:
                             print()
