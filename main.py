@@ -32,7 +32,6 @@ import time
 from pygame import mixer
 
 
-
 introVoices = ["intro_1", "intro_2", "intro_3", "intro_4", "intro_5"]
 
 with open("EVE.json") as file:
@@ -44,6 +43,51 @@ def clearConsole():
         command = 'cls'
     os.system(command)
 
+filename = ""
+
+def Config():
+    print("Checking for changes in system files...")
+    print()
+    time.sleep(1)
+    fileFolder = "config"
+    fileName = "recognized.alice"
+    fileFolder = (os.path.join(fileFolder, fileName))
+    fileExists = os.path.exists(fileFolder)
+    folders = ["config", "voicelines", "files"]
+    files = ["recognized.alice", "readme.txt"]
+
+    # Scan for all folders
+    for folderName in range (len(folders))
+        if not os.path.exists(folderName):
+            print('> file folder '+folderName+' not found...')
+            time.sleep(0.3)
+            print('> creating folder named "'+folderName+'" now...')
+            os.makedirs(folderName)
+            time.sleep(0.5)
+            print("> ")
+            time.sleep(1)
+    if fileExists == False:
+        open(fileFolder, 'x')
+        output_file = open(fileFolder, 'w')
+        for chatlogitems in chatlog:
+            output_file.write(chatlogitems)
+            output_file.write("\n")
+        output_file.close()
+
+        chatlogNum = chatlogNum + 1
+
+        chatlogDisplay = (textcolorGray + "file name: " + textcolorGreen + fileName)
+        print(chatlogDisplay)
+        print()
+        chosen_response = random.choice(responses)
+
+        errorMessage = False                                                  
+    if fileExists == True:
+            print()
+
+
+
+    
 def removeTrainingModel():
     clearConsole()
     print("What is the name of the model you would like to delete?")
