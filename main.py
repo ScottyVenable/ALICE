@@ -33,7 +33,7 @@ from pygame import mixer
 
 
 
-introVoices = ["intro_1", "intro_2", "intro_3"]
+introVoices = ["intro_1", "intro_2", "intro_3", "intro_4", "intro_5"]
 
 with open("EVE.json") as file:
     data = json.load(file)
@@ -365,7 +365,7 @@ def chat():
     reboot = 0
     clearConsole()
     print(textcolorALICE)
-    voicefile = random.choice(introVoices)
+    voicefile = ""
     voicewait = False
     voiceMute = False
     def Speak(voicefile):
@@ -420,7 +420,7 @@ def chat():
                          `````   ....   `````               
                         `    `          `   ``              
                          `` ``          `` `` """)
-        Speak("intro")
+        Speak(random.choice(introVoices))
         time.sleep(1)
         print("""                   _            _____        _____       ______ """)
         time.sleep(0.05)
