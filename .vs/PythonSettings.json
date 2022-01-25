@@ -1,3 +1,4 @@
 {
-  "Interpreter": "CondaEnv|CondaEnv|alice"
+  "Interpreter": "CondaEnv|CondaEnv|alice",
+  "TestFramework": "Pytest"
 }

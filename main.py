@@ -1,5 +1,6 @@
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
+from numpy.core.numeric import False_
 from numpy.lib.function_base import delete
 from tensorflow.python.ops.gen_data_flow_ops import accumulator_apply_gradient
 stemmer = LancasterStemmer()
@@ -29,11 +30,14 @@ import re
 import urlopen
 import vlc
 import time
-from pygame import mixer
+from pygame import Color, mixer
+import vonage
+import pprint
+import pyaudio
 
 
 introVoices = ["intro_1", "intro_2", "intro_3", "intro_4", "intro_5"]
-
+loadingMessage = ""
 with open("EVE.json") as file:
     data = json.load(file)
 
@@ -45,45 +49,119 @@ def clearConsole():
 
 filename = ""
 
-def Config():
-    print("Checking for changes in system files...")
-    print()
+class colors():
+    global textcolorRed
+    global textcolorALICE
+    global textcolorUsername
+    global textcolorWhite
+    global textcolorGray
+    global textcolorGreen
+
+    textcolorRed = '\033[1;31;40m'
+    textcolorALICE = '\033[1;36;40m'
+    textcolorUsername = '\033[1;33;40m'
+    textcolorWhite = '\033[1;37;40m'
+    textcolorGray = '\033[1;30;40m'
+    textcolorGreen = '\033[1;32;40m'
+
+dotCount = 20
+loadingMessage = "Checking system files"
+isSuccessful = True
+loadingSuccess = "DONE!"
+
+class loadingAnimation():
+    colors()
+    
+    global isSuccessful
+
+    global loadingSuccess
+    global loadingFailed
+    global loadingMessage
+    global deleteWait
+
+    deleteWait = 0
+
+    print(loadingMessage)
+
+    while deleteWait < dotCount:
+        deleteWait = deleteWait + 1
+        time.sleep(0.06)
+        clearConsole()
+        loadingMessage+=str(".")
+        print(loadingMessage)
+    if isSuccessful == True:
+        loadingMessage+=str(textcolorGreen + loadingSuccess + textcolorWhite)
+    if isSuccessful == False:
+        loadingMessage+=str(textcolorRed + loadingFailed + textcolorWhite)
+    clearConsole()
+    print(loadingMessage)
     time.sleep(1)
+def Input(prompt):
+    colors()
+    global inputResult
+    option = input(textcolorRed + prompt +": "+textcolorWhite)
+    inputResult = option
+
+def Config():
+    colors()
+    clearConsole()
+    loadingMessage = "Scanning system files"
+    loadingAnimation()
     fileFolder = "config"
     fileName = "recognized.alice"
+
+    folders = ["config", "voicelines", "files", "users", "datasets"]
+    files = ["recognized.alice", "readme.txt"]
+    
+    def Speak(voicefile):
+        voiceMute = False
+        voicewait = False
+        if voiceMute == False:
+            mixer.init()
+            voicepath = "voicelines/" + voicefile + ".mp3"
+            mixer.music.load(voicepath)
+            mixer.music.play()
+            if voicewait == True:
+                while mixer.music.get_busy():  # wait for music to finish playing
+                    time.sleep(1)
+
+    # Scan for all folders!
+    clearConsole()
+    folderCount = len(folders)
+    for folderID in range(folderCount):
+        folderNameStr = folders[folderID]
+        fileFolder = (os.path.join(folderNameStr, fileName))
+        fileExists = os.path.exists(fileFolder)
+        if not os.path.exists(folderNameStr):
+            print()
+            print('File folder "'+textcolorGray+folderNameStr+'"'+textcolorWhite+' not found!')
+            time.sleep(0.2)
+            print("     - Creating new file folder: "+textcolorGray+folderNameStr+'"'+textcolorWhite+'')
+            time.sleep(0.05)
+            os.makedirs(folderNameStr)
+            print(textcolorGreen + "     - DONE!"+textcolorWhite)
+            time.sleep(0.2)
+    print()
+    time.sleep(1)
+    clearConsole()
+
+    # See if this is the first time user has opened ALICE
+    fileName = "recognized.alice"
+    fileFolder = "config"
+    global introduction
     fileFolder = (os.path.join(fileFolder, fileName))
     fileExists = os.path.exists(fileFolder)
-    folders = ["config", "voicelines", "files"]
-    files = ["recognized.alice", "readme.txt"]
-
-    # Scan for all folders
-    for folderName in range (len(folders))
-        if not os.path.exists(folderName):
-            print('> file folder '+folderName+' not found...')
-            time.sleep(0.3)
-            print('> creating folder named "'+folderName+'" now...')
-            os.makedirs(folderName)
-            time.sleep(0.5)
-            print("> ")
-            time.sleep(1)
-    if fileExists == False:
+    if not os.path.exists(fileFolder): #recognized file doesn't exist
+        clearConsole()
         open(fileFolder, 'x')
-        output_file = open(fileFolder, 'w')
-        for chatlogitems in chatlog:
-            output_file.write(chatlogitems)
-            output_file.write("\n")
-        output_file.close()
+        
+        introduction = "intro_notrecognized"
+    else:
+        clearConsole()
+        print("Welcome back!")
+        
+        introduction = "intro_recognized"
 
-        chatlogNum = chatlogNum + 1
-
-        chatlogDisplay = (textcolorGray + "file name: " + textcolorGreen + fileName)
-        print(chatlogDisplay)
-        print()
-        chosen_response = random.choice(responses)
-
-        errorMessage = False                                                  
-    if fileExists == True:
-            print()
 
 
 
@@ -147,7 +225,6 @@ def removeTrainingModel():
     loadingDeleteModel()
     time.sleep(3)
     clearConsole()
-
 def updateTrainingModel():
     voiceMute = False
     voicewait = False
@@ -212,20 +289,21 @@ def updateTrainingModel():
 
 
 current_mood = "neutral"
+
 mood_tags = []
 
 
 
 try: 
-   #  with open("data.pickle", "rb") as f:
-   #     words, labels, training, output = pickle.load(f)
-    scotty.py
+     with open("data.pickle", "rb") as f:
+        words, labels, training, output = pickle.load(f)
+    # scotty.py
 except:
     words = []
     labels = []
     docs_x = []
     docs_y = []
-    
+  
     for intent in data["intents"]:
         for pattern in intent["patterns"]:
             wrds = nltk.word_tokenize(pattern)
@@ -306,75 +384,49 @@ def bag_of_words(s, words):
     net = tflearn.regression(net)
 
     model = tflearn.DNN(net)
-def populateColors():
-    textcolorRed = '\033[1;31;40m'
-    textcolorALICE = '\033[1;36;40m'
-    textcolorUsername = '\033[1;33;40m'
-    textcolorWhite = '\033[1;37;40m'
-    textcolorGray = '\033[1;30;40m'
-    textcolorGreen = '\033[1;32;40m'
 
-isSuccessful = False
-dotCount = 18
-
-loadMessage = "default"
-loadActive = False
-def loadingAnimation():
-    textcolorRed = '\033[1;31;40m'
-    textcolorALICE = '\033[1;36;40m'
-    textcolorUsername = '\033[1;33;40m'
-    textcolorWhite = '\033[1;37;40m'
-    textcolorGray = '\033[1;30;40m'
-    textcolorGreen = '\033[1;32;40m'
-    loadingSuccess = textcolorGreen + "Success!" + textcolorWhite
-    loadingFailed = textcolorRed + "Failed!" + textcolorWhite
-    clearConsole()
-    deleteWait = 0
-    print(loadingMessage)
-
-    while deleteWait < dotCount:
-        deleteWait = deleteWait + 1
-        time.sleep(0.02)
-        clearConsole()
-        loadingMessage+=str(".")
-        print(loadingMessage)
-    if isSuccessful == True:
-        loadingMessage+=str(loadingSuccess)
-        time.sleep(3)
-    if isSuccessful == False:
-        loadingMessage+=str(loadingFailed)
-        time.sleep(3)
-
-
-
-
-
-
-
+colors()
 def chat():
-    from alicecommands import baseCommands
+    textcolorRed = '\033[1;31;40m'
+    textcolorALICE = '\033[1;36;40m'
+    textcolorUsername = '\033[1;33;40m'
+    textcolorWhite = '\033[1;37;40m'
+    textcolorGray = '\033[1;30;40m'
+    textcolorGreen = '\033[1;32;40m'
+
+    Config()
+
     numberList = [1,2,3,4,5,6,7,8,9]
     numberGen = 1
     chatlogNum = 0
+
+    #ALICE Emotions/Mood
     current_mood = "neutral"
+
     sadness_score = 0
+
     anger_score = 0
     happiness_score = 0
     excitement_score = 0
     boredom_score = 0
+    emotional_level = 0
+    
     chatlog = []
+    userinputData = []
+
+    #User Emotions/Mood
+    user_predicted_mood = "neutral"
+    user_sadness_score = 0
+    user_anger_score = 0
+    user_happiness_score = 0
+    user_excitement_score = 0
+    user_boredom_score = 0
+    user_emotional_level = 0
+
 
     while numberGen < 5:
         chatlogNum = chatlogNum + random.choice(numberList)
         numberGen = numberGen + 1
-
-
-    textcolorRed = '\033[1;31;40m'
-    textcolorALICE = '\033[1;36;40m'
-    textcolorUsername = '\033[1;33;40m'
-    textcolorWhite = '\033[1;37;40m'
-    textcolorGray = '\033[1;30;40m'
-    textcolorGreen = '\033[1;32;40m'
     consoleSize = 'mode 70, 35'
     os.system(consoleSize)
 
@@ -395,14 +447,22 @@ def chat():
         model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
         model.save("model.tflearn")
     tf.compat.v1.reset_default_graph()
-
     net = tflearn.input_data(shape=[None, len(training[0])])
     net = tflearn.fully_connected(net, 8)
     net = tflearn.fully_connected(net, 8)
     net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
     net = tflearn.regression(net)
-
     model = tflearn.DNN(net)
+
+    def Prompt(prompt):
+            colors()
+            global promptResult
+            option = input(textcolorRed + prompt +" (y/n): "+textcolorWhite)
+            if option == "y":
+                promptResult = True
+            if option == "n":
+                promptResult = False
+            clearConsole()
 
     clearConsole()
     voices = engine.getProperty('voices')  
@@ -432,17 +492,15 @@ def chat():
             if voicewait == True:
                 while mixer.music.get_busy():  # wait for music to finish playing
                     time.sleep(1)
-    def muteVoicePrompt():
-        muteOption = input("Mute (y/n): ")
-        if muteOption == "y":
-            voiceMute = True
-        if muteOption == "n":
-            voiceMute = False
-        clearConsole()
 
 
     #Main Menu
+    clearConsole()
+
     def MainMenu():
+        global otherName
+        otherName = False
+
         textcolorRed = '\033[1;31;40m'
         textcolorALICE = '\033[1;36;40m'
         textcolorUsername = '\033[1;33;40m'
@@ -450,14 +508,8 @@ def chat():
         textcolorGray = '\033[1;30;40m'
         textcolorGreen = '\033[1;32;40m'
         voiceMute = False
-        def muteVoicePrompt():
-            muteOption = input("Mute (y/n): ")
-            if muteOption == "y":
-                voiceMute = True
-            if muteOption == "n":
-                voiceMute = False
-            clearConsole()
-        muteVoicePrompt()
+        
+ 
         
         print(textcolorGray + "(v0." + programVersionStr + ")" + textcolorALICE)
         print("""
@@ -483,8 +535,11 @@ def chat():
                          `````   ....   `````               
                         `    `          `   ``              
                          `` ``          `` `` """)
-        Speak(random.choice(introVoices))
-        time.sleep(1)
+        Speak(introduction)
+        if introduction == "intro_recognized":
+            time.sleep(1)
+        if introduction == "intro_notrecognized":
+            time.sleep(3)
         print("""                   _            _____        _____       ______ """)
         time.sleep(0.05)
         print("""       /\         | |          |_   _|      / ____|     |  ____| """)
@@ -504,27 +559,35 @@ def chat():
         print("""               """+textcolorALICE+"""[ LOGIN ]"""+textcolorGreen+"""     [ UPDATE ]"""+textcolorRed+"""     [ EXIT ]                """)   
         print()
         voicewait = True
-        if voiceMute == False:
-            Speak("desiredintent")
+
     MainMenu()
     mainmenu = True
     inp = input(textcolorWhite+"""                      > """ + textcolorALICE).upper()
     print(textcolorWhite)
+
     if inp.lower() == "update":
         menuChoice = 3
         exit = 1
-    if inp.lower() == "!debug":
+        True
+    if inp.lower() == "debug":
         menuChoice = 2
     if inp.lower() == "login":
         menuChoice = 1
     if inp.lower() == "exit":
         exit = 1
 
+        clearConsole()
+        inp = input(textcolorWhite+"""                      > """ + textcolorALICE).upper()
+        print(textcolorWhite)
+
+
 
 
     if menuChoice == 1:
-        
+       
         while True:
+          
+
             consoleSize = 'mode 43, 35'
             os.system(consoleSize)
             debugMode = 0
@@ -546,16 +609,21 @@ def chat():
                 voicefile = "welcome_guest"
             if inp == "liam":
                 username_id = 2
+            if inp == "gavin":
+                username_id = 3
         
             password = pwinput.pwinput(prompt=textcolorWhite + "Password: " + textcolorGray, mask='*')
             
             print(textcolorWhite)
-    
+
             # Login Users
+            if username_id == 3 and password == "jurassic":
+                logon_successful = 1
+                user_name = "Gavin"
+                admin = 0
             if username_id == 1 and password == "scotty2hotty":
                 logon_successful = 1
                 user_name = "Scotty"
-                password = "scotty2hotty"
                 admin = 1
             if username_id == 2 and password == "fortnite":
                 logon_successful = 1
@@ -566,6 +634,11 @@ def chat():
                 logon_successful = 1
                 user_name = "Guest"
                 password = "guest"
+                admin = 0
+            if username_id == 3 and password == "tuna":
+                logon_successful = 1
+                user_name = "Luna"
+                password = "tuna"
                 admin = 0
     
             clearConsole()
@@ -675,6 +748,7 @@ def chat():
                 
                 loginLoadSuccess() 
                 
+
                 Speak("welcome_" + user_name.lower())
 
                 print("Welcome, " + textcolorUsername + user_name + textcolorWhite + "!")
@@ -712,6 +786,9 @@ def chat():
         
     if exit == 0:
         if reboot == 0:
+
+
+
             enterPassword = False
             pwAction = ""
             while True:
@@ -827,8 +904,9 @@ def chat():
 
                     if labels[results_index] == "terminate":
                         chosen_response = random.choice(responses)
-                        pwAction = "terminate"
-                        enterPassword = True
+                        if admin == 0:
+                            pwAction = "terminate"
+                            enterPassword = True
                     # Display the date
                     if labels[results_index] == "date":   
                         chosen_response = random.choice(responses)
@@ -836,6 +914,8 @@ def chat():
 
                     # Display current mood
                     if labels[results_index] == "howareyou":
+                        if sadness_score >= 2:
+                            tg = "sad_terms_mild"
                         chosen_response = random.choice(responses)
                         systemValue = current_mood
 
@@ -843,6 +923,7 @@ def chat():
                     if labels[results_index] == "time":
                         chosen_response = random.choice(responses)
                         systemValue = give_time
+                    
                     
                 
                     # Display Emotional Data
@@ -871,6 +952,28 @@ def chat():
                         chosen_response = random.choice(responses)
                      
                         # Moods/Emotions
+                    if labels[results_index] == "call":
+                        chosen_response = random.choice(responses)
+                        Input("Phone Number: " + textcolorGray)
+                        phoneNumbertoCall = inputResult
+                        Input("Message: " + textcolorGray)
+                        callMessage = inputResult
+
+                        keyPathFolder = "config"
+                        client = vonage.Client(
+                                 application_id="31d611fc-6d18-4b95-9d2e-dd6a639b2f97",
+                                 private_key="C:/Users/scott/Desktop/private.key",
+                                 )
+
+                        voice = vonage.Voice(client)
+
+                        response = voice.create_call({
+                            'to': [{'type': 'phone', 'number': phoneNumbertoCall}],
+                            'from': {'type': 'phone', 'number': "12077407650"},
+                            'ncco': [{'action': 'talk', 'text': callMessage}]
+                        })
+
+                        pprint(response)
 
                     if labels[results_index] == "howareyou":
 
@@ -886,8 +989,14 @@ def chat():
                             current_mood = "excited"
                         if boredom_score > 5:
                             current_mood = "bored"
-                        chosen_response = random.choice(responses)
+
+                        #if there isn't a lot of emotional data, ALICE defaults to feeling 'neutral'.
+                        if emotional_level < 3:
+                            current_mood = "neutral";
+                        
                         systemValue = current_mood
+                        chosen_response = random.choice(responses)
+                        
 
                     if labels[results_index] == "math":
                         mathString = userChat
@@ -935,6 +1044,10 @@ def chat():
                             if fileExists == True:
                                 errorMessage = True
                                 errorCode = 1
+                    if labels[results_index] == "debug_increase_sadness":
+                        sadness_score += 1
+                        chosen_response = random.choice(responses)
+
 
                     if labels[results_index] == "createchatlog":    
                         current_time = datetime.datetime.now()
@@ -949,6 +1062,8 @@ def chat():
                             os.makedirs("chatlogs")
 
                         if fileExists == False:
+
+                            chatlog.append("\n -END OF CHATLOG-")
                             open(fileFolder, 'x')
 
                             output_file = open(fileFolder, 'w')
@@ -969,7 +1084,9 @@ def chat():
                         
                         if fileExists == True:
                             chatlogNum = chatlogNum + 1
-
+                    if labels[results_index] == "whatsmyname":
+                        chosen_response = random.choice(responses)
+                        systemValue = textcolorUsername + user_name + "."
                     if labels[results_index] == "createnewtrainingmodel":
                         chosen_response = random.choice(responses)
                         updateTrainingModel()
@@ -1008,7 +1125,6 @@ def chat():
                             chatlog.append("("+chatlogTime + ") - " + "ALICE: " + chosen_response)
                             print()
                             print(textcolorALICE + "ALICE: " + textcolorWhite + chosen_response)                
-                      #     print("A.L.I.C.E: " + chosen_response)
                             engine.say(chosen_response + systemValue)
                             engine.runAndWait()
                         if errorMessage == True:
@@ -1027,7 +1143,7 @@ def chat():
                     print()
                     current_time = datetime.datetime.now()
                     chatlogTime = current_time.strftime("%I:%M:%S %p")
-                    print(textcolorALICE + "ALICE: I'm sorry, I don't understand.")
+                    print(textcolorALICE + "ALICE: " + textcolorRed + "I'm sorry, I don't understand." + textcolorWhite)
                     chatlog.append("("+chatlogTime + ") - " + "ALICE: I'm sorry, I don't understand.")
                     engine.say("I'm sorry, I don't understand.")
                     engine.runAndWait()

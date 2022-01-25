@@ -23,7 +23,7 @@
 
     {
       "tag": "howareyou",
-      "patterns": [ "how are you feeling", "hows it going", "how are you feeling today", "how do you feel", "tell me how you feel", "what feelings do you have" ],
+      "patterns": [ "how are you", "how are you feeling", "hows it going", "how are you feeling today", "how do you feel", "tell me how you feel", "what feelings do you have", "how are you feeling", "how do you feel today", "how do you feel right now" ],
       "responses": [ "I'm feeling ", "I feel ", "Right now I feel ", "I'm ", "I am " ],
       "context_set": ""
     },
@@ -38,7 +38,7 @@
     {
       "tag": "praise",
       "patterns": [ "good job", "great job", "awesome job", "you did so good", "you are awesome", "you are doing amazing", "im so proud of you", "you make me so proud", "very great job", "yes you did so good", "thats some amazing work", "very well done", "well done" ],
-      "responses": [ "Thank you so much!", "Thank you!", "I'm glad I am living up to your standards!", "Thank you very much!", "Thank you so much. That makes me feel so nice.", "Thank you for that!" ],
+      "responses": [ "Thank you so much!", "Thank you!", "I'm glad I am living up to your standards!", "Thank you very much!", "Thank you so much. That makes me feel so nice.", "Thank you for that!", "I am trying my best!" ],
       "context_set": ""
     },
 
@@ -189,10 +189,62 @@
     {
       "tag": "terminate",
       "patterns": [ "terminate", "terminate this program", "alice shutdown", "shutdown alice", "terminate alice", "alice terminate" ],
-      "responses": [ "Please confirm that you would like to terminate.", "Please enter your password to terminate.", "To terminate, please enter your password."]
+      "responses": [ "Please confirm that you would like to terminate.", "Please enter your password to terminate.", "To terminate, please enter your password." ]
+    },
+
+    {
+      "tag": "call",
+      "patterns": [ "make a call", "make a phone call", "call someone", "call " ],
+      "responses": [ "Sure, what is the phone number?", "Certainly, what is the phone number you would like me to call?" ]
+    },
+
+    {
+      "tag": "whatsmyname",
+      "patterns": [ "whats my name", "tell me my name", "what name do I have", "what is my name" ],
+      "responses": [ "I believe your name is ", "Your name is ", "I believe you told me your name was ", "You have told me your name is " ]
+    },
+
+    {
+      "tag": "updateuserDataSet",
+      "patterns": [ "generate user data set", "create a user data set from this conversation", "from this conversation create a user data set", "generate a new data set from our coversation", "can you generate a new data set", "generate a current data set", "create a current dataset", "create a current data set" ],
+      "responses": [ "Sure, generating a user data set.", "Certainly, I've created a user data set." ]
+    },
+
+    {
+      "tag": "newconversation_transition",
+      "patterns": [],
+      "responses": [ "So, ", "Anyway, ", "I was wondering, " ]
+    },
+
+    {
+      "tag": "newconversation_whatareyoudoing",
+      "patterns": [],
+      "responses": [ "what are you up to?", "what are your plans for today?", "how's it going?" ]
+    },
+
+    {
+      "tag": "sad_terms_mild",
+      "patterns": [],
+      "responses": [ "down", "down in the dumps", "a little sad", "kind of sad" ]
+    },
+
+    {
+      "tag": "sad_terms_moderate",
+      "patterns": [],
+      "responses": [ "sad", "depressed", "like I want to cry" ]
+    },
+
+    {
+      "tag": "sad_terms_extreme",
+      "patterns": [],
+      "responses": [ "really depressed", "very sad", "not good at all" ]
+    },
+
+    {
+      "tag": "debug_increase_sadness",
+      "patterns": ["/hurtfeelings", "/hurt", "/sadnessincrease", "/increasesadness", "/makesad", "/addsad", "/addsadness" ],
+      "responses": ["Sadness increased by 1", "+1 sadness", "Added +1 sadness"]
     }
-
-
 
 
 
